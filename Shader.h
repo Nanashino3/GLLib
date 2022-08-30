@@ -1,8 +1,17 @@
 #pragma once
 
-#include <glad/gl.h>
+class Window;
+
 class Shader
 {
 public:
-	static GLuint Load2DShader(const char*, const char*);
+	Shader();
+	~Shader();
+
+	void Initialize(const Window&);
+
+	unsigned int GetShaderProgram() const { return mShader; }
+
+private:
+	unsigned int mShader;
 };

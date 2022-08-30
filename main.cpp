@@ -1,24 +1,28 @@
+
 #include <iostream>
-#define GLAD_GL_IMPLEMENTATION
 
 #include "GLLib.h"
 
 int main()
 {
 	// OpenGLŠÖ˜A‚Ì‰Šú‰»
-	if(!GLLibInit()){
-		std::cerr << "GLLibInit Error." << std::endl;
+	if(!tkl::LibraryInit()){
+		std::cerr << "LibraryInit Error." << std::endl;
 		return 1;
 	}
 
 	// ”wŒiF‚ğŒˆ’è
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	while(!ProcessMessage()){
+	while(!tkl::ProcessMessage()){
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		SwapBuffers();
+		tkl::DrawBox();
+
+		tkl::SwapBuffers();
 	}
 
-	GLLibEnd();
+	tkl::LibraryEnd();
+
+	return 0;
 }

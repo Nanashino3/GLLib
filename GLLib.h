@@ -1,12 +1,14 @@
 #pragma once
 
-#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-bool GLLibInit();
-void GLLibEnd();
-
+namespace tkl
+{
+bool LibraryInit();
 bool ProcessMessage();
 void SwapBuffers();
+void LibraryEnd();
 
-int DrawBox(int, int, int, int, unsigned int, int);
+int DrawBox(/*int, int, int, int, unsigned int, int*/);
+int DrawTriangle(/*int, int, int, int, unsigned int, int*/);
+}

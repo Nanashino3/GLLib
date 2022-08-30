@@ -1,10 +1,18 @@
-
 #include "Shader.h"
 
+#include <GL/glew.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
 
+#include "Window.h"
+#include "Matrix.h"
+
+//********************************************************
+// 関数名：PrintShaderInfoLog
+// 概　要：シェーダオブジェクトのリンク結果を表示
+// 引　数：第1引数[IN]　シェーダオブジェクト名
+// 　　　　第2引数[IN]　表示する文字列
 bool PrintShaderInfoLog(GLuint shader, const char* logStr)
 {
 	GLint status;
@@ -25,6 +33,10 @@ bool PrintShaderInfoLog(GLuint shader, const char* logStr)
 	return static_cast<bool>(status);
 }
 
+//********************************************************
+// 関数名：PrintProgramInfoLog
+// 概　要：プログラムオブジェクトのリンク結果を表示
+// 引　数：第1引数[IN]　プログラムオブジェクト名
 bool PrintProgramInfoLog(GLuint program)
 {
 	GLint status;
@@ -45,12 +57,17 @@ bool PrintProgramInfoLog(GLuint program)
 	return static_cast<bool>(status);
 }
 
-GLuint CreateShader(const char* vertexSrc, const char* fragmentSrc)
+//********************************************************
+// 関数名：CreateShader
+// 概　要：シェーダオブジェクトを作成
+// 引　数：第1引数[IN]　頂点シェーダのソースプログラム
+// 　　　　第2引数[IN]　画素シェーダのソースプログラム
+unsigned int CreateShader(const char* vertexSrc, const char* fragmentSrc)
 {
 	const GLuint program = glCreateProgram();
 
 	// 頂点シェーダオブジェクト
-	if (vertexSrc != NULL) {
+	if (vertexSrc != 0) {
 		const GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vertexSrc, nullptr);
 		glCompileShader(vertexShader);
@@ -62,7 +79,7 @@ GLuint CreateShader(const char* vertexSrc, const char* fragmentSrc)
 	}
 
 	// 画素シェーダオブジェクト
-	if (fragmentSrc != NULL) {
+	if (fragmentSrc != 0) {
 		const GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fragShader, 1, &fragmentSrc, nullptr);
 		glCompileShader(fragShader);
@@ -73,17 +90,24 @@ GLuint CreateShader(const char* vertexSrc, const char* fragmentSrc)
 		glDeleteShader(fragShader);
 	}
 
+	glBindAttribLocation(program, 0, "position");
+	glBindFragDataLocation(program, 0, "fragment");
 	glLinkProgram(program);
-	if(PrintProgramInfoLog(program)){ return program; }
+
+	if(PrintProgramInfoLog(program)){ return static_cast<unsigned int>(program); }
 
 	glDeleteProgram(program);
 	return 0;
 }
 
-
+//********************************************************
+// 関数名：ReadShaderFile
+// 概　要：シェーダファイルの読み込み
+// 引　数：第1引数[IN]　 ファイル名
+// 　　　　第2引数[OUT]　シェーダのソースプログラム
 bool ReadShaderFile(const char* fileName, std::vector<GLchar>& buffer)
 {
-	if (fileName == NULL) { return false; }
+	if (fileName == 0) { return false; }
 
 	std::ifstream file(fileName, std::ios::binary);
 	if (file.fail()) {
@@ -93,7 +117,7 @@ bool ReadShaderFile(const char* fileName, std::vector<GLchar>& buffer)
 
 	// ファイルサイズを取得
 	file.seekg(0, std::ios::end);
-	int length = file.tellg();
+	size_t length = file.tellg();
 
 	// ファイルサイズ分のメモリ確保
 	buffer.resize(length + 1);
@@ -113,7 +137,12 @@ bool ReadShaderFile(const char* fileName, std::vector<GLchar>& buffer)
 	return true;
 }
 
-GLuint Shader::Load2DShader(const char* vertexFile, const char* fragmentFile)
+//********************************************************
+// 関数名：Load2DShader
+// 概　要：シェーダオブジェクトのロード(2D用)
+// 引　数：第1引数[IN]　頂点シェーダのファイル名
+// 　　　　第2引数[IN]　画素シェーダのファイル名
+unsigned int Load2DShader(const char* vertexFile, const char* fragmentFile)
 {
 	std::vector<GLchar> vertexSrc;
 	const bool vRet = ReadShaderFile(vertexFile, vertexSrc);
@@ -121,4 +150,23 @@ GLuint Shader::Load2DShader(const char* vertexFile, const char* fragmentFile)
 	const bool fRet = ReadShaderFile(fragmentFile, fragmentSrc);
 
 	return (vRet && fRet) ? CreateShader(vertexSrc.data(), fragmentSrc.data()) : 0;
+}
+
+Shader::Shader()
+: mShader(-1)
+{}
+
+Shader::~Shader()
+{}
+
+void Shader::Initialize(const Window& window)
+{
+	mShader = Load2DShader("point.vert", "point.frag");
+
+	//// 正射影行列を作成
+	//const GLfloat* windowSize = window.GetWindowSize();
+	//Matrix orthogonalProjection = Matrix::OrthogonalProjection(windowSize[0], windowSize[1]);
+
+	//GLuint orthogonalProjectionLoc = glGetUniformLocation(mShader, "viewProjection");
+	//glUniformMatrix4fv(orthogonalProjectionLoc, 1, GL_TRUE, orthogonalProjection.Data());
 }

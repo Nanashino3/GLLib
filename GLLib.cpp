@@ -1,71 +1,37 @@
-
-
 #include "GLLib.h"
+#include "System.h"
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include "Shader.h"
-
-GLFWwindow* gWindow = nullptr;
-GLuint ShaderProgram = -1;
-
-void ShaderInit()
+namespace tkl
 {
-	ShaderProgram = Shader::Load2DShader("point.vert", "point.frag");
-}
-
-bool GLLibInit()
+bool LibraryInit()
 {
-	if (!glfwInit()) {
-		std::cerr << "Can't initialize GLFW" << std::endl;
-		return false;
-	}
-
-	GLFWwindow* const window = glfwCreateWindow(640, 480, "Hello", NULL, NULL);
-	if(window == NULL){
-		std::cerr << "Can't create GLFW window." << std::endl;
-		return false;
-	}
-	gWindow = window;
-	glfwMakeContextCurrent(window);
-
-	const int version = gladLoadGL(glfwGetProcAddress);
-	if (!version) {
-		std::cerr << "" << std::endl;
-		return false;
-	}
-
-	std::cout
-		<< "Load OpenGLF"
-		<< GLAD_VERSION_MAJOR(version)
-		<< "."
-		<< GLAD_VERSION_MINOR(version)
-		<< std::endl;
-
-	ShaderInit();
-
+	System::GetInstance()->Initialize();
 	return true;
-}
-
-void GLLibEnd()
-{
-	glfwTerminate();
 }
 
 bool ProcessMessage()
 {
-	return glfwWindowShouldClose(gWindow);
+	return System::GetInstance()->ProcessMessage();
 }
 
 void SwapBuffers()
 {
-	glfwSwapBuffers(gWindow);
-	glfwPollEvents();
+	System::GetInstance()->DoubleBuffering();
 }
 
-int DrawBox(int fx, int fy, int ex, int ey, unsigned int color, int fillFlag)
+void LibraryEnd()
 {
-	//glUseProgram(shaderProgram);
+	System::GetInstance()->Finalize();
+}
+
+int DrawBox(/*int fx, int fy, int ex, int ey, unsigned int color, int fillFlag*/)
+{
+	return System::GetInstance()->DrawBox();
+}
+
+int DrawTriangle(/*int, int, int, int, unsigned int, int*/)
+{
 	return 0;
+}
+
 }

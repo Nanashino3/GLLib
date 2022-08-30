@@ -8,6 +8,9 @@
     <Filter Include="Library">
       <UniqueIdentifier>{02d4d045-2d8e-43ba-a49f-594872ef3423}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Library\System">
+      <UniqueIdentifier>{671dcdae-f079-41e4-ab99-598d577d0e32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -16,15 +19,24 @@
     <ClCompile Include="GLLib.cpp">
       <Filter>Library</Filter>
     </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Library\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Library\System</Filter>
+    </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Library</Filter>
+      <Filter>Library\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Library\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Figure.cpp">
+      <Filter>Library\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLLib.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
       <Filter>Library</Filter>
     </ClInclude>
   </ItemGroup>
