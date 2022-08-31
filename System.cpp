@@ -54,11 +54,6 @@ bool System::Initialize()
 	mShader->Initialize(*mWindow.get());
 
 	mShaderProgram = mShader->GetShaderProgram();
-
-	mSizeLoc = glGetUniformLocation(mShaderProgram, "size");
-	mScaleLoc = glGetUniformLocation(mShaderProgram, "scale");
-	//mModelLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
-
 	return true;
 }
 
@@ -90,36 +85,26 @@ void System::Finalize()
 	glfwTerminate();
 }
 
-int System::DrawBox()
+int System::DrawBox(/*int fx, int fy, int ex, int ey*/)
 {
 	glUseProgram(mShaderProgram);
 
-	
-
 	if(mRectagle == nullptr){
-		Figure::Vertex points[] = {
-			{ -0.5f, -0.5f },
-			{  0.5f, -0.5f },
-			{  0.5f,  0.5f },
-			{ -0.5f,  0.5f }
-		};
+		Figure::Vertex points[] = { -0.5f,  0.5f, 0.5f,  0.5f, 0.5f, -0.5f, -0.5f, -0.5f };
 		mRectagle = std::make_unique<Shape>(2, 4, points);
 	}
 
-	glUniform2fv(mSizeLoc, 1, mWindow->GetWindowSize());
-	glUniform1f(mScaleLoc, mWindow->GetScale());
-	
-	//const GLfloat* size = mWindow->GetWindowSize();
-	//const GLfloat scale = mWindow->GetScale() * 2.0f;
-	//const Matrix scaling = Matrix::Scale(scale / size[0], scale / size[1], 1.0f);
+	const GLfloat* size = mWindow->GetWindowSize();
 
-	//GLfloat x = 0.0 * 2.0f / size[0] - 1.0f;
-	//GLfloat y = 1.0f - 0.0 * 2.0f / size[1];
-	//const GLfloat const position[] = {x, y};
-	//const Matrix translation = Matrix::Translate(position[0], position[1], 0.0f);
-
-	//const Matrix worldTransform = translation * scaling;
-	//glUniformMatrix4fv(mModelLoc, 1, GL_FALSE, worldTransform.Data());
+	float x = 0.0, y = 0.0f;
+	GLfloat temp[4][4] = {
+		{59.0f, 0.0f, 0.0f, 0.0f},
+		{ 0.0, 84.0f, 0.0f, 0.0f},
+		{ 0.0f, 0.0f, 1.0f, 0.0f},
+		{x - size[0] / 2.0f + 59.0f / 2.0f, -y + size[1] / 2.0f - 84.0f / 2.0f, 0.0f, 1.0f}
+	};
+	GLuint worldTransformLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
+	glUniformMatrix4fv(worldTransformLoc, 1, GL_TRUE, *temp);
 
 	if(mRectagle != nullptr){
 		mRectagle->Draw();

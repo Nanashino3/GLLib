@@ -18,7 +18,7 @@ public:
 	void Finalize();
 
 	// 図形描画関連
-	int DrawBox();
+	int DrawBox(/*int, int, int, int*/);
 
 private:
 	System();
@@ -31,7 +31,5 @@ private:
 	std::unique_ptr<Shader> mShader;	// シェーダのポインタ
 	std::unique_ptr<Shape> mRectagle;	// 四角用
 
-	int mSizeLoc, mScaleLoc;
-	int mModelLoc;
 	unsigned int mShaderProgram;		// シェーダオブジェクト
 };

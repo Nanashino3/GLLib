@@ -89,9 +89,6 @@ unsigned int CreateShader(const char* vertexSrc, const char* fragmentSrc)
 		}
 		glDeleteShader(fragShader);
 	}
-
-	glBindAttribLocation(program, 0, "position");
-	glBindFragDataLocation(program, 0, "fragment");
 	glLinkProgram(program);
 
 	if(PrintProgramInfoLog(program)){ return static_cast<unsigned int>(program); }
@@ -162,11 +159,12 @@ Shader::~Shader()
 void Shader::Initialize(const Window& window)
 {
 	mShader = Load2DShader("point.vert", "point.frag");
+	glUseProgram(mShader);
 
-	//// ê≥éÀâeçsóÒÇçÏê¨
-	//const GLfloat* windowSize = window.GetWindowSize();
-	//Matrix orthogonalProjection = Matrix::OrthogonalProjection(windowSize[0], windowSize[1]);
+	// ê≥éÀâeçsóÒÇçÏê¨
+	const GLfloat* windowSize = window.GetWindowSize();
+	Matrix orthogonalProjection = Matrix::OrthogonalProjection(windowSize[0], windowSize[1]);
 
-	//GLuint orthogonalProjectionLoc = glGetUniformLocation(mShader, "viewProjection");
-	//glUniformMatrix4fv(orthogonalProjectionLoc, 1, GL_TRUE, orthogonalProjection.Data());
+	GLuint orthogonalProjectionLoc = glGetUniformLocation(mShader, "viewProjection");
+	glUniformMatrix4fv(orthogonalProjectionLoc, 1, GL_TRUE, orthogonalProjection.Data());
 }
