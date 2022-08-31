@@ -10,6 +10,8 @@
 #include "Shape.h"
 #include "Matrix.h"
 
+#include "Input.h"
+
 System* System::sInstance = nullptr;
 System::System()
 : mWindow(nullptr)
@@ -63,6 +65,7 @@ bool System::Initialize()
 // ˆø@”F‚È‚µ
 bool System::ProcessMessage()
 {
+	tkl::Input::Update(mWindow->GetWindow());
 	return mWindow->IsWindowShouldClose();
 }
 
@@ -85,30 +88,24 @@ void System::Finalize()
 	glfwTerminate();
 }
 
-int System::DrawBox(/*int fx, int fy, int ex, int ey*/)
+int System::DrawBox(int fx, int fy, int ex, int ey, unsigned int color, int fillFlag)
 {
 	glUseProgram(mShaderProgram);
-
 	if(mRectagle == nullptr){
 		Figure::Vertex points[] = { -0.5f,  0.5f, 0.5f,  0.5f, 0.5f, -0.5f, -0.5f, -0.5f };
 		mRectagle = std::make_unique<Shape>(2, 4, points);
 	}
 
 	const GLfloat* size = mWindow->GetWindowSize();
-
-	float x = 0.0, y = 0.0f;
 	GLfloat temp[4][4] = {
-		{59.0f, 0.0f, 0.0f, 0.0f},
-		{ 0.0, 84.0f, 0.0f, 0.0f},
-		{ 0.0f, 0.0f, 1.0f, 0.0f},
-		{x - size[0] / 2.0f + 59.0f / 2.0f, -y + size[1] / 2.0f - 84.0f / 2.0f, 0.0f, 1.0f}
+		{ex, 0.0f, 0.0f, 0.0f},
+		{0.0f, ey, 0.0f, 0.0f},
+		{0.0f, 0.0, 1.0f, 0.0f},
+		{fx - size[0] / 2.0f + ex / 2.0f, -fy + size[1] / 2.0f - ey / 2.0f, 0.0f, 1.0f}
 	};
 	GLuint worldTransformLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
 	glUniformMatrix4fv(worldTransformLoc, 1, GL_TRUE, *temp);
 
-	if(mRectagle != nullptr){
-		mRectagle->Draw();
-	}
-
+	if(mRectagle != nullptr){ mRectagle->Draw(); }
 	return 0;
 }

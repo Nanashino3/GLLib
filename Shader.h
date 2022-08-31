@@ -1,7 +1,6 @@
 #pragma once
 
 class Window;
-
 class Shader
 {
 public:

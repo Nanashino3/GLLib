@@ -2,6 +2,10 @@
 
 #include <memory>
 
+namespace tkl{
+	class Input;
+}
+
 class Window;
 class Shader;
 class Shape;
@@ -18,7 +22,7 @@ public:
 	void Finalize();
 
 	// 図形描画関連
-	int DrawBox(/*int, int, int, int*/);
+	int DrawBox(int, int, int, int, unsigned int, int);
 
 private:
 	System();
@@ -29,6 +33,7 @@ private:
 	static System* sInstance;
 	std::unique_ptr<Window> mWindow;	// ウィンドウのポインタ
 	std::unique_ptr<Shader> mShader;	// シェーダのポインタ
+
 	std::unique_ptr<Shape> mRectagle;	// 四角用
 
 	unsigned int mShaderProgram;		// シェーダオブジェクト

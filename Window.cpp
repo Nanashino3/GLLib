@@ -47,12 +47,6 @@ Window::~Window()
 
 bool Window::IsWindowShouldClose() const
 {
-	// イベントを取り出す
-	glfwPollEvents();
-
-	//double x, y;
-	//glfwGetCursorPos(mWindow, &x, &y);
-
 	return glfwWindowShouldClose(mWindow);
 }
 
@@ -65,16 +59,14 @@ void Window::SwapBuffers() const
 {
 	// カラーバッファを入れ替える
 	glfwSwapBuffers(mWindow);
+
+	// イベントを取り出す
+	glfwPollEvents();
 }
 
 
 void Window::Resize(GLFWwindow* const window, int width, int height)
 {
-	//int frameBufWidth, frameBufHeight;
-	//glfwGetFramebufferSize(window, &frameBufWidth, &frameBufHeight);
-
-	//glViewport(0, 0, frameBufWidth, frameBufHeight);
-
 	Window* const instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
 	if(instance != 0){
 		instance->mWindowSize[0] = static_cast<GLfloat>(width);

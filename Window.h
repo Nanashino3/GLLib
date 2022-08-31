@@ -13,6 +13,7 @@ public:
 
 	static void Resize(GLFWwindow* const, int, int);
 
+	GLFWwindow* GetWindow() const { return mWindow; }
 	// ウィンドウサイズを取得
 	const GLfloat* GetWindowSize() const { return mWindowSize; }
 	// ワールド座標系に対するデバイス座標系の拡大率を取り出す
