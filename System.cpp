@@ -65,6 +65,7 @@ bool System::Initialize()
 // 引　数：なし
 bool System::ProcessMessage()
 {
+	// 入力処理の更新
 	tkl::Input::Update(mWindow->GetWindow());
 	return mWindow->IsWindowShouldClose();
 }
