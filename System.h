@@ -36,5 +36,7 @@ private:
 
 	std::unique_ptr<Shape> mRectagle;	// 四角用
 
+	unsigned int mModelViewLoc;
+	unsigned int mProjectionLoc;
 	unsigned int mShaderProgram;		// シェーダオブジェクト
 };

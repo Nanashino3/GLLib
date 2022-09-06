@@ -56,6 +56,9 @@ bool System::Initialize()
 	mShader->Initialize(*mWindow.get());
 
 	mShaderProgram = mShader->GetShaderProgram();
+
+	mModelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
+	mProjectionLoc = glGetUniformLocation(mShaderProgram, "projection");
 	return true;
 }
 
@@ -92,20 +95,55 @@ void System::Finalize()
 int System::DrawBox(int fx, int fy, int ex, int ey, unsigned int color, int fillFlag)
 {
 	glUseProgram(mShaderProgram);
-	if(mRectagle == nullptr){
+
+	if (mRectagle == nullptr) {
 		Figure::Vertex points[] = { -0.5f,  0.5f, 0.5f,  0.5f, 0.5f, -0.5f, -0.5f, -0.5f };
 		mRectagle = std::make_unique<Shape>(2, 4, points);
 	}
 
+#if 1
+	//****************************
+	// ワールド座標作成
+	const GLfloat* windowSize = mWindow->GetWindowSize();
+	Matrix scaling = Matrix::Scale(ex, ey, 1.0f);
+	Matrix translation = Matrix::Translate(fx - windowSize[0] / 2.0f + ex / 2.0f, -fy + windowSize[1] / 2.0f - ey / 2.0f, 0.0f);
+	Matrix worldTransform = translation * scaling;
+
+	GLuint worldTransLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
+	glUniformMatrix4fv(worldTransLoc, 1, GL_TRUE, worldTransform.Data());
+
+	//****************************
+	// ビュー射影行列作成
+	Matrix viewProj = Matrix::SimpleViewProjection(windowSize[0], windowSize[1]);
+
+	GLuint viewProjLoc = glGetUniformLocation(mShaderProgram, "viewProjection");
+	glUniformMatrix4fv(viewProjLoc, 1, GL_TRUE, viewProj.Data());
+
+	if (mRectagle != nullptr) { mRectagle->Draw(); }
+#else
+
 	const GLfloat* size = mWindow->GetWindowSize();
-	GLfloat temp[4][4] = {
-		{ex, 0.0f, 0.0f, 0.0f},
-		{0.0f, ey, 0.0f, 0.0f},
-		{0.0f, 0.0, 1.0f, 0.0f},
-		{fx - size[0] / 2.0f + ex / 2.0f, -fy + size[1] / 2.0f - ey / 2.0f, 0.0f, 1.0f}
-	};
-	GLuint worldTransformLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
-	glUniformMatrix4fv(worldTransformLoc, 1, GL_TRUE, *temp);
+	Matrix worldTransform;
+	worldTransform.LoadIdentity();
+	worldTransform[0] = ex;
+	worldTransform[5] = ey;
+	worldTransform[12] = fx - size[0] / 2.0f + ex / 2.0f;
+	worldTransform[13] = -fy + size[1] / 2.0f - ey / 2.0f;
+
+	GLuint modelViewLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_TRUE, worldTransform.Data());
+
+	//GLfloat temp[4][4] = {
+	//	{ex, 0.0f, 0.0f, 0.0f},
+	//	{0.0f, ey, 0.0f, 0.0f},
+	//	{0.0f, 0.0, 1.0f, 0.0f},
+	//	{fx - size[0] / 2.0f + ex / 2.0f, -fy + size[1] / 2.0f - ey / 2.0f, 0.0f, 1.0f}
+	//};
+
+	//GLuint worldTransformLoc = glGetUniformLocation(mShaderProgram, "worldTransform");
+	//glUniformMatrix4fv(worldTransformLoc, 1, GL_TRUE, *temp);
+
+#endif
 
 	if(mRectagle != nullptr){ mRectagle->Draw(); }
 	return 0;

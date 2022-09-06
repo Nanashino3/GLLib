@@ -19,8 +19,19 @@ int main()
 	while(!tkl::ProcessMessage()){
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		if(tkl::Input::IsKeyDownTrigger(eKeys::KB_A)){
-			std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
+		if(tkl::Input::IsKeyDown(eKeys::KB_A)){
+			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
+			x -= 1.0f;
+		}
+		if(tkl::Input::IsKeyDown(eKeys::KB_D)){
+			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
+			x += 1.0f;
+		}
+		if(tkl::Input::IsKeyDown(eKeys::KB_S)){
+			y += 1.0f;
+		}
+		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
+			y -= 1.0f;
 		}
 		tkl::DrawBox(x, y, 50, 50, -1, true);
 
