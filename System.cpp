@@ -92,7 +92,8 @@ void System::Finalize()
 	glfwTerminate();
 }
 
-int System::DrawBox(int posX, int posY, int width, int height, unsigned int color, int fillFlag)
+// 2D四角形
+int System::DrawBox(float posX, float posY, float width, float height, unsigned int color, int fillFlag)
 {
 	glUseProgram(mShaderProgram);
 
@@ -141,45 +142,54 @@ int System::DrawBox(int posX, int posY, int width, int height, unsigned int colo
 	return 0;
 }
 
-int System::DrawBox3D(int posX, int posY, int width, int height, unsigned int color, int fillFlag)
+// 3Dボックス
+int System::DrawBox3D(float posX, float posY, float width, float height, unsigned int color, int fillFlag)
 {
-//	glUseProgram(mShaderProgram);
-//
-//	if (mRectagle == nullptr) {
-//		Figure::Vertex* vertices = {
-//			
-//		};
-//
-//		GLsizei indicesNum = sizeof(indices) / sizeof(indices[0]);
-//		mRectagle = std::make_unique<Shape>(3, 8, vertices, indicesNum, indices);
-//	}
-//
-//	//**********************************************
-//	// モデルビュー行列作成
-//
-//	// モデル行列作成
-//	Matrix sm = Matrix::Scale(50.0f, 50.0f, 50.0f);
-//	Matrix tm = Matrix::Translate(posX, -posY, 0.0f);
-//	Matrix mm = tm * sm;
-//
-//	// モデルビュー行列
-//	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-////	Matrix vm = Matrix::Identity();
-//	Matrix mvm = vm * mm;
-//	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
-//	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, mvm.Data());
-//	//**********************************************
-//
-//	//**********************************************
-//	// 射影行列作成
-//	const GLfloat* windowSize = mWindow->GetWindowSize();
-//	GLfloat w = windowSize[0] / 2.0f, h = windowSize[1] / 2.0f;
-//	Matrix pm = Matrix::OrthogonalProjection(-w, w, -h, h, 1.0f, -1.0f);
-//
-//	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
-//	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
-//	//**********************************************
-//
-//	if (mRectagle != nullptr) { mRectagle->Draw(); }
+	glUseProgram(mShaderProgram);
+	if (mRectagle == nullptr) {
+		Figure::Vertex vertices[] = {
+			{ -1.0f, -1.0f, -1.0f },	// 頂点0
+			{ -1.0f, -1.0f,  1.0f },	// 頂点1
+			{ -1.0f,  1.0f,  1.0f },	// 頂点2
+			{ -1.0f,  1.0f, -1.0f },	// 頂点3
+			{  1.0f,  1.0f, -1.0f },	// 頂点4
+			{  1.0f, -1.0f, -1.0f },	// 頂点5
+			{  1.0f, -1.0f,  1.0f },	// 頂点6
+			{  1.0f,  1.0f,  1.0f }		// 頂点7
+		};
+
+		GLuint indices[] = {
+			0, 1, 2, 0, 2, 3,	// 左
+			3, 3, 4, 0, 4, 5,	// 裏
+			0, 5, 6, 0, 6, 1,	// 下
+			7, 6, 5, 7, 5, 4,	// 右
+			7, 4, 3, 7, 3, 2,	// 上
+			7, 2, 1, 7, 1, 6
+		};
+		GLsizei indicesNum = sizeof(indices) / sizeof(indices[0]);
+		mRectagle = std::make_unique<Shape>(3, 8, vertices, indicesNum, indices);
+	}
+
+	//**********************************************
+	// モデルビュー行列作成
+	Matrix mm = Matrix::Translate(posX, -posY, 0.0f);
+	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix mvm = vm * mm;
+
+	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, mvm.Data());
+	//**********************************************
+
+	//**********************************************
+	// 射影行列作成
+	const GLfloat* windowSize = mWindow->GetWindowSize();
+	GLfloat aspect = windowSize[0] / windowSize[1];
+	Matrix pm = Matrix::PerspectiveProjection(90.0f, aspect, 1.0f, 10.0f);
+
+	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
+	//**********************************************
+
+	if (mRectagle != nullptr) { mRectagle->Draw(); }
 	return 0;
 }

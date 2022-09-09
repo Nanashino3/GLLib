@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <math.h>
+#include "Util.h"
 
 #include "Vector.h"
 
@@ -172,15 +173,20 @@ public:
 	}
 
 	// ìßéãéÀâeçsóÒ
-	static Matrix PerspectiveProjection(GLfloat fovy, GLfloat aspect, GLfloat near, GLfloat far)
+	static Matrix PerspectiveProjection(GLfloat degree, GLfloat aspect, GLfloat near, GLfloat far)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
-		//const GLfloat fsn = far - near;
-		//if(fsn != 0.0f){
-		//	temp[5]	= 1.0f / tanf(fovy * 0.5f);
-		//	temp[0]
-		//}
+		GLfloat fovy = ToRadian(degree);
+		GLfloat fsn = far - near;
+		if(fsn != 0.0f){
+			temp[5]	 = 1.0f / tanf(fovy * 0.5f);
+			temp[0]  = temp[5] / aspect;
+			temp[10] = -(far + near) / fsn;
+			temp[11] = -1.0f;
+			temp[14] = -2.0f * far * near / fsn;
+			temp[15] = 0.0f;
+		}
 		return temp;
 	}
 

@@ -23,4 +23,5 @@ void Shape::Execute() const
 {
 	// ê‹ÇÍê¸Ç≈ï`âÊ
 	glDrawElements(GL_TRIANGLES, mIndexNum, GL_UNSIGNED_INT, 0);
+//	glDrawElements(GL_LINES, mIndexNum, GL_UNSIGNED_INT, 0);
 }
