@@ -160,11 +160,4 @@ void Shader::Initialize(const Window& window)
 {
 	mShader = Load2DShader("point.vert", "point.frag");
 	glUseProgram(mShader);
-
-	//// 単純なビュー射影行列を作成
-	//const GLfloat* windowSize = window.GetWindowSize();
-	//Matrix viewProjection = Matrix::SimpleViewProjection(windowSize[0], windowSize[1]);
-
-	//GLuint viewProjectionLoc = glGetUniformLocation(mShader, "viewProjection");
-	//glUniformMatrix4fv(viewProjectionLoc, 1, GL_TRUE, viewProjection.Data());
 }

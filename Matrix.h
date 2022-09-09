@@ -40,13 +40,6 @@ public:
 	// 変換行列の配列を返す
 	const GLfloat* Data() const{ return mMatrix; }
 
-	// 単位行列を設定
-	void LoadIdentity()
-	{
-		std::fill(mMatrix, mMatrix + 16, 0.0f);
-		mMatrix[0] = mMatrix[5] = mMatrix[10] = mMatrix[15] = 1.0f;
-	}
-
 	// 単位行列を作成
 	static Matrix Identity()
 	{
@@ -122,7 +115,6 @@ public:
 	// ビュー行列
 	static Matrix LookAt(const Vector3& camPos, const Vector3& targetPos, const Vector3& up)
 	{
-#if 1
 		// カメラ座標作成
 		Vector3 zAxis = Vector3::Normalize(camPos - targetPos);
 		Vector3 xAxis = Vector3::Normalize(Vector3::Cross(up, zAxis));
@@ -141,42 +133,6 @@ public:
 		temp[12] = trans.mX; temp[13] = trans.mY; temp[14] = trans.mZ;
 
 		return temp;
-#else
-		// 視点を原点に合わせる
-		const Matrix translate = Translate(-camPos.mX, -camPos.mY, -camPos.mZ);
-
-		// 各軸のベクトルを計算する
-		Vector3 zAxis = camPos - targetPos;				// t軸
-		Vector3 xAxis = Vector3::Cross(up, zAxis);		// r軸
-		Vector3 yAxis = Vector3::Cross(zAxis, xAxis);	// s軸
-
-		// 長さのチェック
-		const GLfloat length = Vector3::Length(yAxis);
-		if(length == 0.0f) return translate;
-
-		// 回転行列を作成する
-		Matrix rotation;
-		rotation.LoadIdentity();
-		
-		// 各軸正規化して回転行列に格納
-		Vector3 xAxisNormalize = Vector3::Normalize(xAxis);
-		rotation[0]  = xAxisNormalize.mX;
-		rotation[4]  = xAxisNormalize.mY;
-		rotation[8]  = xAxisNormalize.mZ;
-
-		Vector3 yAxisNormalize = Vector3::Normalize(yAxis);
-		rotation[1]  = yAxisNormalize.mX;
-		rotation[5]  = yAxisNormalize.mY;
-		rotation[9]  = yAxisNormalize.mZ;
-
-		Vector3 zAxisNormalize = Vector3::Normalize(zAxis);
-		rotation[2]  = zAxisNormalize.mX;
-		rotation[6]  = zAxisNormalize.mY;
-		rotation[10] = zAxisNormalize.mZ;
-
-		// 視点の平行移動と視線の回転を一つにする
-		return rotation * translate;
-#endif
 	}
 
 
@@ -213,6 +169,27 @@ public:
 		temp[14] = -fan / fsn;
 
 		return temp;
+	}
+
+	// 透視射影行列
+	static Matrix PerspectiveProjection(GLfloat fovy, GLfloat aspect, GLfloat near, GLfloat far)
+	{
+		Matrix temp;
+		temp.LoadIdentity();
+		//const GLfloat fsn = far - near;
+		//if(fsn != 0.0f){
+		//	temp[5]	= 1.0f / tanf(fovy * 0.5f);
+		//	temp[0]
+		//}
+		return temp;
+	}
+
+private:
+	// 単位行列を設定
+	void LoadIdentity()
+	{
+		std::fill(mMatrix, mMatrix + 16, 0.0f);
+		mMatrix[0] = mMatrix[5] = mMatrix[10] = mMatrix[15] = 1.0f;
 	}
 
 private:

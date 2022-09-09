@@ -33,7 +33,8 @@ int main()
 		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
 			y -= 1.0f;
 		}
-		tkl::DrawBox(x, y, 50, 50, -1, true);
+		//tkl::DrawBox(x, y, 50, 50, -1, true);
+		tkl::DrawBox3D(x, y, 50, 50, -1, true);
 
 		tkl::SwapBuffers();
 	}

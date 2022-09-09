@@ -1,8 +1,9 @@
 #include "Shape.h"
 
-Shape::Shape(GLint dimension, GLsizei vertexNum, const Figure::Vertex* vertex, GLsizei indexCount, const GLuint* index)
-: mFigure(std::make_shared<const Figure>(dimension, vertexNum, vertex, indexCount, index))
+Shape::Shape(GLint dimension, GLsizei vertexNum, const Figure::Vertex* vertex, GLsizei indexNum, const GLuint* index)
+: mFigure(std::make_shared<const Figure>(dimension, vertexNum, vertex, indexNum, index))
 , mVertexNum(vertexNum)
+, mIndexNum(indexNum)
 {}
 
 Shape::~Shape()
@@ -21,5 +22,5 @@ void Shape::Draw() const
 void Shape::Execute() const
 {
 	// ê‹ÇÍê¸Ç≈ï`âÊ
-	glDrawArrays(GL_LINE_LOOP, 0, mVertexNum);
+	glDrawElements(GL_TRIANGLES, mIndexNum, GL_UNSIGNED_INT, 0);
 }

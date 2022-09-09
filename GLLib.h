@@ -10,5 +10,5 @@ void SwapBuffers();
 void LibraryEnd();
 
 int DrawBox(int, int, int, int, unsigned int, int);
-int DrawTriangle(/*int, int, int, int, unsigned int, int*/);
+int DrawBox3D(int, int, int, int, unsigned int, int);
 }

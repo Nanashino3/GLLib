@@ -11,10 +11,11 @@ public:
 	void Draw() const;
 
 private:
-	virtual void Execute() const;
+	void Execute() const;
 
 protected:
 	const GLsizei mVertexNum;
+	const GLsizei mIndexNum;
 
 private:
 	std::shared_ptr<const Figure> mFigure;

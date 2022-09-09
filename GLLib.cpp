@@ -24,16 +24,15 @@ void LibraryEnd()
 	System::GetInstance()->Finalize();
 }
 
-int DrawBox(int fx, int fy, int ex, int ey, unsigned int color, int fillFlag)
+int DrawBox(int posX, int posY, int width, int height, unsigned int color, int fillFlag)
 {
-	int x = fx + 1, y = fy + 1;
-	int width = ex + 1, height = ey + 1;
-	return System::GetInstance()->DrawBox(x, y, width, height, color, fillFlag);
+	return System::GetInstance()->DrawBox(posX, posY, width, height, color, fillFlag);
 }
 
-int DrawTriangle(/*int, int, int, int, unsigned int, int*/)
+
+int DrawBox3D(int posX, int posY, int width, int height, unsigned int color, int fillFlag)
 {
-	return 0;
+	return System::GetInstance()->DrawBox3D(posX, posY, width, height, color, fillFlag);
 }
 
 }
