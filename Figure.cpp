@@ -18,8 +18,11 @@ Figure::Figure(GLint dimension, GLsizei vertexNum, const Vertex* vertex, GLsizei
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), index, GL_STATIC_DRAW);
 
 	// 結合されている頂点バッファオブジェクトをin変数から参照できるようにする
+	glVertexAttribPointer(0, dimension, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<Vertex*>(0)->position);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, dimension, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
+	glVertexAttribPointer(1, dimension, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<Vertex*>(0)->color);
+	glEnableVertexAttribArray(1);
 }
 
 Figure::~Figure()

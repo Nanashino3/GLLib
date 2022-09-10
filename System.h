@@ -23,7 +23,7 @@ public:
 
 	// }Œ`•`‰æŠÖ˜A
 	int DrawBox(float, float, float, float, unsigned int, int);
-	int DrawBox3D(float, float, float, float, unsigned int, int);
+	int DrawBox3D(float, float, float, float, float, unsigned int, int);
 
 private:
 	System();

@@ -8,6 +8,7 @@ public:
 	struct Vertex
 	{
 		GLfloat position[3];	// à íu
+		GLfloat color[3];		// êF
 	};
 
 	Figure(GLint, GLsizei, const Vertex*, GLsizei indexCount = 0, const GLuint* index = 0);

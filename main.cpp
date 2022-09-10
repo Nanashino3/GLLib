@@ -17,7 +17,7 @@ int main()
 
 	float x = 0.0f, y = 0.0f;
 	while(!tkl::ProcessMessage()){
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if(tkl::Input::IsKeyDown(eKeys::KB_A)){
 			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
@@ -34,7 +34,8 @@ int main()
 			y -= 0.5f;
 		}
 		//tkl::DrawBox(x, y, 50, 50, -1, true);
-		tkl::DrawBox3D(x, y, 50.0f, 50.0f, -1, true);
+		tkl::DrawBox3D(x, y, 0.0f, 50.0f, 50.0f, -1, true);
+		tkl::DrawBox3D(x, y, 3.0f, 50.0f, 50.0f, -1, true);
 
 		tkl::SwapBuffers();
 	}

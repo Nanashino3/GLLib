@@ -29,9 +29,9 @@ int DrawBox(float posX, float posY, float width, float height, unsigned int colo
 	return System::GetInstance()->DrawBox(posX, posY, width, height, color, fillFlag);
 }
 
-int DrawBox3D(float posX, float posY, float width, float height, unsigned int color, int fillFlag)
+int DrawBox3D(float posX, float posY, float posZ, float width, float height, unsigned int color, int fillFlag)
 {
-	return System::GetInstance()->DrawBox3D(posX, posY, width, height, color, fillFlag);
+	return System::GetInstance()->DrawBox3D(posX, posY, posZ, width, height, color, fillFlag);
 }
 
 }

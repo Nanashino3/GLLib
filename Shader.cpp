@@ -89,6 +89,11 @@ unsigned int CreateShader(const char* vertexSrc, const char* fragmentSrc)
 		}
 		glDeleteShader(fragShader);
 	}
+
+	// Šeí‘®«‚ğƒŠƒ“ƒN‚·‚é
+	glBindAttribLocation(program, 0, "inPosition");
+	glBindAttribLocation(program, 1, "inColor");
+	glBindFragDataLocation(program, 0, "fragment");
 	glLinkProgram(program);
 
 	if(PrintProgramInfoLog(program)){ return static_cast<unsigned int>(program); }
