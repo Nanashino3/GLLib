@@ -54,11 +54,6 @@ bool System::Initialize()
 	// ウィンドウ画面作成
 	mWindow = std::make_unique<Window>();
 
-	// 背面カリングを有効にする
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-
 	// デプスバッファ(Zバッファ)を有効にする
 	glClearDepth(1.0f);
 	glDepthFunc(GL_LESS);
@@ -112,10 +107,10 @@ int System::DrawBox(float posX, float posY, float width, float height, unsigned 
 
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
-			-1.0f,  1.0f, 0.0f,	// 左上
-			 1.0f,  1.0f, 0.0f,	// 右上
-			 1.0f, -1.0f, 0.0f,	// 右下
-			-1.0f, -1.0f, 0.0f	// 左下
+			{ -1.0f,  1.0f,  0.0f,  1.0f,  0.0f,  0.0f}, // 左上
+			{  1.0f,  1.0f,  0.0f,	1.0f,  0.0f,  0.0f}, // 右上
+			{  1.0f, -1.0f,  0.0f,  1.0f,  0.0f,  0.0f}, // 右下
+			{ -1.0f, -1.0f,  0.0f,  1.0f,  0.0f,  0.0f}	 // 左下
 		};
 		GLuint indices[] = {
 			0, 1, 2,
@@ -161,37 +156,37 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 	glUseProgram(mShaderProgram);
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
-			// 左
+			// 左面
 			{ -1.0f, -1.0f, -1.0f, 0.1f, 0.8f, 0.1f },
 			{ -1.0f, -1.0f,  1.0f, 0.1f, 0.8f, 0.1f },
 			{ -1.0f,  1.0f,  1.0f, 0.1f, 0.8f, 0.1f },
 			{ -1.0f,  1.0f, -1.0f, 0.1f, 0.8f, 0.1f },
 			
-			// 裏
+			// 裏面
 			{  1.0f, -1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
 			{ -1.0f, -1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
 			{ -1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
 			{  1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
 
-			// 下
+			// 下面
 			{ -1.0f, -1.0f, -1.0f, 0.1f, 0.8f, 0.8f },
 			{  1.0f, -1.0f, -1.0f, 0.1f, 0.8f, 0.8f },
 			{  1.0f, -1.0f,  1.0f, 0.1f, 0.8f, 0.8f },
 			{ -1.0f, -1.0f,  1.0f, 0.1f, 0.8f, 0.8f },
 
-			// 右
+			// 右面
 			{  1.0f, -1.0f,  1.0f, 0.1f, 0.1f, 0.8f },
 			{  1.0f, -1.0f, -1.0f, 0.1f, 0.1f, 0.8f },
 			{  1.0f,  1.0f, -1.0f, 0.1f, 0.1f, 0.8f },
 			{  1.0f,  1.0f,  1.0f, 0.1f, 0.1f, 0.8f },
 
-			// 上
+			// 上面
 			{ -1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.1f },
 			{ -1.0f,  1.0f,  1.0f, 0.8f, 0.1f, 0.1f },
 			{  1.0f,  1.0f,  1.0f, 0.8f, 0.1f, 0.1f },
 			{  1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.1f },
 
-			// 前
+			// 前面
 			{ -1.0f, -1.0f,  1.0f, 0.8f, 0.8f, 0.1f },
 			{  1.0f, -1.0f,  1.0f, 0.8f, 0.8f, 0.1f },
 			{  1.0f,  1.0f,  1.0f, 0.8f, 0.8f, 0.1f },
@@ -206,25 +201,12 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 			16, 17, 18, 16, 18, 19,	// 上面
 			20, 21, 22, 20, 22, 23	// 前面
 		};
-//		Figure::Vertex vertices[] = {
-//			{ -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f },	// 頂点0
-//			{ -1.0f, -1.0f,  1.0f, 0.0f, 0.0f, 0.8f },	// 頂点1
-//			{ -1.0f,  1.0f,  1.0f, 0.0f, 0.8f, 0.0f },	// 頂点2
-//			{ -1.0f,  1.0f, -1.0f, 0.0f, 0.8f, 0.8f },	// 頂点3
-//			{  1.0f,  1.0f, -1.0f, 0.8f, 0.0f, 0.0f },	// 頂点4
-//			{  1.0f, -1.0f, -1.0f, 0.8f, 0.0f, 0.8f },	// 頂点5
-//			{  1.0f, -1.0f,  1.0f, 0.8f, 0.8f, 0.0f },	// 頂点6
-//			{  1.0f,  1.0f,  1.0f, 0.8f, 0.8f, 0.8f }	// 頂点7
-//		};
-//
-//		GLuint indices[] = {
-//			0, 1, 2, 0, 2, 3,	// 左
-//			0, 3, 4, 0, 4, 5,	// 裏
-//			0, 5, 6, 0, 6, 1,	// 下
-//			7, 6, 5, 7, 5, 4,	// 右
-//			7, 4, 3, 7, 3, 2,	// 上
-//			7, 2, 1, 7, 1, 6	// 前
-//		};
+
+		// 背面カリングを有効にする
+		glFrontFace(GL_CCW);
+		glCullFace(GL_BACK);
+		glEnable(GL_CULL_FACE);
+
 		GLsizei indicesNum = sizeof(indices) / sizeof(indices[0]);
 		mRectagle = std::make_unique<Shape>(3, 24, vertices, indicesNum, indices);
 	}
@@ -232,7 +214,7 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 	//**********************************************
 	// モデルビュー行列作成
 	
-	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(1.0f, 0.0f, 1.0f));
 
 	Matrix mm = rm * Matrix::Translate(posX, -posY, posZ);
 	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));

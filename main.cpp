@@ -6,6 +6,7 @@
 
 int main()
 {
+
 	// OpenGLŠÖ˜A‚Ì‰Šú‰»
 	if(!tkl::LibraryInit()){
 		std::cerr << "LibraryInit Error." << std::endl;
@@ -33,9 +34,10 @@ int main()
 		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
 			y -= 0.5f;
 		}
-		//tkl::DrawBox(x, y, 50, 50, -1, true);
+		
+//		tkl::DrawBox(x, y, 50, 50, -1, true);
 		tkl::DrawBox3D(x, y, 0.0f, 50.0f, 50.0f, -1, true);
-		tkl::DrawBox3D(x, y, 3.0f, 50.0f, 50.0f, -1, true);
+//		tkl::DrawBox3D(x, y, 3.0f, 50.0f, 50.0f, -1, true);
 
 		tkl::SwapBuffers();
 	}

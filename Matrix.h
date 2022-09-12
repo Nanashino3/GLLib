@@ -113,30 +113,28 @@ public:
 		return temp;
 	}
 
-	// ”CˆÓŽ²‰ñ“](s—ñ)
-	static Matrix Rotate(GLfloat a, Vector3 vec)
+	// ”CˆÓŽ²‰ñ“](•ûŒü—]Œ·)
+	static Matrix Rotate(GLfloat rotate, Vector3 vec)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
 
-		GLfloat d = sqrt(vec.mX * vec.mX + vec.mY * vec.mY + vec.mZ * vec.mZ);
+		GLfloat length = Vector3::Length(vec);
+		GLfloat dx = vec.mX / length, dy = vec.mY / length, dz = vec.mZ / length;
 
-		if(d > 0.0f){
-			GLfloat l   = vec.mX / d, m = vec.mY / d, n = vec.mZ / d;
-			GLfloat l2  = l * l, m2 = m * m, n2 = n * n;
-			GLfloat lm  = l * m, mn = m * n, nl = n * l;
-			GLfloat cos = std::cos(a), c1 = 1.0f - cos, sin = std::sin(a);
+		GLfloat cos = std::cosf(rotate), sin = std::sinf(rotate);
 
-			temp[0]  = (1.0f - l2) * cos + l2;
-			temp[1]  = lm * c1 + n * sin;
-			temp[2]  = nl * c1 - m * sin;
-			temp[4]  = lm * c1 - n * sin;
-			temp[5]  = (1.0f - m2) * cos + m2;
-			temp[6]  = mn * c1 + l * sin;
-			temp[8]  = nl * c1 + m * sin;
-			temp[9]  = mn * c1 - l * sin;
-			temp[10] = (1.0f - n2) * cos + n2;
-		}
+		temp[0]  = dx * dx + (1.0f - dx * dx) * cos;
+		temp[1]  = dx * dy * (1.0f - cos) - dz * sin;
+		temp[2]  = dx * dz * (1.0f - cos) + dy * sin;
+		
+		temp[4]  = dy * dx * (1.0f - cos) + dz * sin;
+		temp[5]  = dy * dy + (1.0f - dy * dy) * cos;
+		temp[6]  = dy * dz * (1.0f - cos) - dx * sin;
+
+		temp[8]  = dz * dx * (1.0f - cos) - dy * sin;
+		temp[9]  = dz * dy * (1.0f - cos) + dz * sin;
+		temp[10] = dz * dz + (1.0f - dz * dz) * cos;
 
 		return temp;
 	}
