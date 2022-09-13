@@ -154,9 +154,9 @@ public:
 
 		Matrix temp;
 		temp.LoadIdentity();
-		temp[0]  = xAxis.mX; temp[1]  = yAxis.mX; temp[2]  = zAxis.mX;
-		temp[4]  = xAxis.mY; temp[5]  = yAxis.mY; temp[6]  = zAxis.mZ;
-		temp[8]  = xAxis.mZ; temp[9]  = yAxis.mZ; temp[10] = zAxis.mZ;
+		temp[0]  = xAxis.mX; temp[1]  = xAxis.mY; temp[2]  = xAxis.mZ;
+		temp[4]  = yAxis.mX; temp[5]  = yAxis.mY; temp[6]  = yAxis.mZ;
+		temp[8]  = zAxis.mX; temp[9]  = zAxis.mY; temp[10] = zAxis.mZ;
 		temp[12] = trans.mX; temp[13] = trans.mY; temp[14] = trans.mZ;
 
 		return temp;

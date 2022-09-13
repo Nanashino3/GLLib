@@ -214,10 +214,10 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 	//**********************************************
 	// モデルビュー行列作成
 	
-	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(1.0f, 0.0f, 1.0f));
+	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
 
-	Matrix mm = rm * Matrix::Translate(posX, -posY, posZ);
-	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix mm = Matrix::Translate(posX, -posY, posZ);
+	Matrix vm = Matrix::LookAt(Vector3(0.0f, 0.0f, 10.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 	Matrix mvm = vm * mm;
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
@@ -228,7 +228,7 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 	// 射影行列作成
 	const GLfloat* windowSize = mWindow->GetWindowSize();
 	GLfloat aspect = windowSize[0] / windowSize[1];
-	Matrix pm = Matrix::PerspectiveProjection(90.0f, aspect, 1.0f, 10.0f);
+	Matrix pm = Matrix::PerspectiveProjection(40.0f, aspect, 1.0f, -1.0f);
 
 	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
