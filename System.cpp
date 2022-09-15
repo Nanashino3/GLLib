@@ -1,6 +1,7 @@
 #include "System.h"
 
 #include <iostream>
+#include <iomanip>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -239,68 +240,66 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 }
 
 // 球
-int System::DrawSphere(float radius, int divWidth, int divHeight)
+int System::DrawSphere(float posX, float posY, float posZ, float radius, int divWidth, int divHeight)
 {
 	glUseProgram(mShaderProgram);
-	
 	if(mSphere == nullptr){
-		// 球の分割数
-		const int slices = 16, stacks = 8;
-		std::vector<Figure::Vertex> solidSphereVertex;
-		for (int j = 0; j <= stacks; ++j) {
+		std::vector<Figure::Vertex> sphereVertex;
+		// 頂点座標計算
+		for(int i = 0; i < (divHeight + 1); ++i){
+			float t = static_cast<float>(i) / static_cast<float>(divHeight);
+			float y = std::cosf(PI * t) * radius;		// 高さ
+			float r = std::sinf(PI * t) * radius;		// 半径
 
-			// y = cos(πt);
-			// r = sin(πt);
-			const float t = static_cast<float>(j) / static_cast<float>(stacks);
-			const float y = std::cosf(PI * t), r = std::sinf(PI * t);
+			for(int j = 0; j < (divWidth + 1); ++j){
+				float s = static_cast<float>(j) / static_cast<float>(divWidth);
+				float x = r * std::cosf(2 * PI * s);	// 横幅
+				float z = r * std::sinf(2 * PI * s);	// 奥行き
 
-			for (int i = 0; i <= slices; ++i) {
-				// z = r * cos(2πt);
-				// x = r * sin(2πt);
-				const float s = static_cast<float>(i) / static_cast<float>(slices);
-				const float z = r * std::cosf(2 * PI * s), x = r * std::sinf(2 * PI * s);
-
-				// 頂点座標
-				const Figure::Vertex vertex = { x, y, z, x, y, z };
-				solidSphereVertex.emplace_back(vertex);
+				// 頂点座標を登録
+				Figure::Vertex vertex = {x, y, z, x, y, z};
+				sphereVertex.emplace_back(vertex);
 			}
 		}
 
-		// インデックスを作成
-		std::vector<GLuint> solidSphereIndex;
-		for (int j = 0; j < stacks; ++j) {
-			const int k = (slices + 1) * j;
-			for (int i = 0; i < slices; ++i) {
-				// 頂点インデックス
-				const GLuint k0 = k + i;
-				const GLuint k1 = k0 + 1;
-				const GLuint k2 = k1 + slices;
-				const GLuint k3 = k2 + 1;
+		// インデックス計算
+		std::vector<GLuint> sphereIndex;
+		for(int i = 0; i < (divHeight + 1); ++i){
+			for(int j = 0; j < (divWidth + 1); ++j){
+				int v0 = (divWidth + 1) * i + j;	// 左上
+				int v1 = v0 + 1;					// 右上
+				int v2 = v1 + divWidth;				// 左下
+				int v3 = v2 + 1;					// 右下
+
+				std::cout << std::setw(3) << v0 << " " << 
+							 std::setw(3) << v1 << " " << 
+							 std::setw(3) << v2 << " " <<
+							 std::setw(3) << v3 << std::endl;
 
 				// 左下の三角形
-				solidSphereIndex.emplace_back(k0);
-				solidSphereIndex.emplace_back(k2);
-				solidSphereIndex.emplace_back(k3);
+				sphereIndex.emplace_back(v0);
+				sphereIndex.emplace_back(v2);
+				sphereIndex.emplace_back(v3);
 
-				// 右下の三角形
-				solidSphereIndex.emplace_back(k0);
-				solidSphereIndex.emplace_back(k3);
-				solidSphereIndex.emplace_back(k1);
+				// 右上の三角形
+				sphereIndex.emplace_back(v0);
+				sphereIndex.emplace_back(v3);
+				sphereIndex.emplace_back(v1);
 			}
 		}
 
-		mSphere = std::make_unique<Shape>(3, 
-										  static_cast<GLsizei>(solidSphereVertex.size()), solidSphereVertex.data(),
-										  static_cast<GLsizei>(solidSphereIndex.size()), solidSphereIndex.data());
 
+		mSphere = std::make_unique<Shape>(3, 
+			static_cast<GLsizei>(sphereVertex.size()), sphereVertex.data(),
+			static_cast<GLsizei>(sphereIndex.size()), sphereIndex.data());
 	}
 
 	//**********************************************
 	// モデルビュー行列作成
 	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
 
-	Matrix mm = rm * Matrix::Translate(0, 0, 0);
-	Matrix vm = Matrix::LookAt(Vector3(0.0f, 0.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix mm = rm * Matrix::Translate(posX, -posY, posZ);
+	Matrix vm = Matrix::LookAt(Vector3(2.0f, 3.0f, 4.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 	Matrix mvm = vm * mm;
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");

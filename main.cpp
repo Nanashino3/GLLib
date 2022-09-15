@@ -37,7 +37,7 @@ int main()
 		
 //		tkl::DrawBox(x, y, 50, 50, -1, true);
 //		tkl::DrawCube(x, y, 0.0f, 50.0f, 50.0f, -1, true);
-		tkl::DrawSphere(20.0f, 16, 8);
+		tkl::DrawSphere(x, y, 0.0f, 1.0f, 16, 8);
 
 		tkl::SwapBuffers();
 	}

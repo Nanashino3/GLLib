@@ -11,5 +11,5 @@ void LibraryEnd();
 
 int DrawBox(float, float, float, float, unsigned int, int);
 int DrawCube(float, float, float, float, float, unsigned int, int);
-int DrawSphere(float, int, int);
+int DrawSphere(float, float, float, float, int, int);
 }

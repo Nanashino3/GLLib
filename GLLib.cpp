@@ -34,9 +34,9 @@ int DrawCube(float posX, float posY, float posZ, float width, float height, unsi
 	return System::GetInstance()->DrawCube(posX, posY, posZ, width, height, color, fillFlag);
 }
 
-int DrawSphere(float radius, int divWidth, int divHeight)
+int DrawSphere(float posX, float posY, float posZ, float radius, int divWidth, int divHeight)
 {
-	return System::GetInstance()->DrawSphere(radius, divWidth, divHeight);
+	return System::GetInstance()->DrawSphere(posX, posY, posZ, radius, divWidth, divHeight);
 }
 
 }

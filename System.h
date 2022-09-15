@@ -26,7 +26,7 @@ public:
 
 	// 3DŠÖ˜A•`‰æ
 	int DrawCube(float, float, float, float, float, unsigned int, int);
-	int DrawSphere(float, int, int);
+	int DrawSphere(float, float, float, float, int, int);
 
 private:
 	System();
