@@ -151,7 +151,7 @@ int System::DrawBox(float posX, float posY, float width, float height, unsigned 
 }
 
 // 3Dボックス
-int System::DrawBox3D(float posX, float posY, float posZ, float width, float height, unsigned int color, int fillFlag)
+int System::DrawCube(float posX, float posY, float posZ, float width, float height, unsigned int color, int fillFlag)
 {
 	glUseProgram(mShaderProgram);
 	if (mRectagle == nullptr) {
@@ -214,10 +214,10 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 	//**********************************************
 	// モデルビュー行列作成
 	
-	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 0.0f, 1.0f));
+	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
 
 	Matrix mm = rm * Matrix::Translate(posX, -posY, posZ);
-	Matrix vm = Matrix::LookAt(Vector3(0.0f, 0.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 	Matrix mvm = vm * mm;
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
@@ -235,5 +235,89 @@ int System::DrawBox3D(float posX, float posY, float posZ, float width, float hei
 	//**********************************************
 
 	if (mRectagle != nullptr) { mRectagle->Draw(); }
+	return 0;
+}
+
+// 球
+int System::DrawSphere(float radius, int divWidth, int divHeight)
+{
+	glUseProgram(mShaderProgram);
+	
+	if(mSphere == nullptr){
+		// 球の分割数
+		const int slices = 16, stacks = 8;
+		std::vector<Figure::Vertex> solidSphereVertex;
+		for (int j = 0; j <= stacks; ++j) {
+
+			// y = cos(πt);
+			// r = sin(πt);
+			const float t = static_cast<float>(j) / static_cast<float>(stacks);
+			const float y = std::cosf(PI * t), r = std::sinf(PI * t);
+
+			for (int i = 0; i <= slices; ++i) {
+				// z = r * cos(2πt);
+				// x = r * sin(2πt);
+				const float s = static_cast<float>(i) / static_cast<float>(slices);
+				const float z = r * std::cosf(2 * PI * s), x = r * std::sinf(2 * PI * s);
+
+				// 頂点座標
+				const Figure::Vertex vertex = { x, y, z, x, y, z };
+				solidSphereVertex.emplace_back(vertex);
+			}
+		}
+
+		// インデックスを作成
+		std::vector<GLuint> solidSphereIndex;
+		for (int j = 0; j < stacks; ++j) {
+			const int k = (slices + 1) * j;
+			for (int i = 0; i < slices; ++i) {
+				// 頂点インデックス
+				const GLuint k0 = k + i;
+				const GLuint k1 = k0 + 1;
+				const GLuint k2 = k1 + slices;
+				const GLuint k3 = k2 + 1;
+
+				// 左下の三角形
+				solidSphereIndex.emplace_back(k0);
+				solidSphereIndex.emplace_back(k2);
+				solidSphereIndex.emplace_back(k3);
+
+				// 右下の三角形
+				solidSphereIndex.emplace_back(k0);
+				solidSphereIndex.emplace_back(k3);
+				solidSphereIndex.emplace_back(k1);
+			}
+		}
+
+		mSphere = std::make_unique<Shape>(3, 
+										  static_cast<GLsizei>(solidSphereVertex.size()), solidSphereVertex.data(),
+										  static_cast<GLsizei>(solidSphereIndex.size()), solidSphereIndex.data());
+
+	}
+
+	//**********************************************
+	// モデルビュー行列作成
+	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
+
+	Matrix mm = rm * Matrix::Translate(0, 0, 0);
+	Matrix vm = Matrix::LookAt(Vector3(0.0f, 0.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix mvm = vm * mm;
+
+	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, mvm.Data());
+	//**********************************************
+
+	//**********************************************
+	// 射影行列作成
+	const GLfloat* windowSize = mWindow->GetWindowSize();
+	GLfloat aspect = windowSize[0] / windowSize[1];
+	Matrix pm = Matrix::PerspectiveProjection(60.0f, aspect, 1.0f, -1.0f);
+
+	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
+	//**********************************************
+
+	if(mSphere != nullptr){ mSphere->Draw(); }
+
 	return 0;
 }

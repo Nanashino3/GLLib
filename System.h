@@ -23,7 +23,10 @@ public:
 
 	// 図形描画関連
 	int DrawBox(float, float, float, float, unsigned int, int);
-	int DrawBox3D(float, float, float, float, float, unsigned int, int);
+
+	// 3D関連描画
+	int DrawCube(float, float, float, float, float, unsigned int, int);
+	int DrawSphere(float, int, int);
 
 private:
 	System();
@@ -36,6 +39,7 @@ private:
 	std::unique_ptr<Shader> mShader;	// シェーダのポインタ
 
 	std::unique_ptr<Shape> mRectagle;	// 四角用
+	std::unique_ptr<Shape> mSphere;		// 球
 
 	unsigned int mModelViewLoc;
 	unsigned int mProjectionLoc;
