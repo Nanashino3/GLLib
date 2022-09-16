@@ -7,6 +7,8 @@ public:
 	Vector3() : mX(0.0f), mY(0.0f), mZ(0.0f){}
 	Vector3(float x, float y, float z) : mX(x), mY(y), mZ(z){}
 
+	const float* GetAsFloatPtr() const{ return reinterpret_cast<const float*>(&mX); }
+
 	// ‰ÁŽZ
 	Vector3 operator+(const Vector3& v) const
 	{

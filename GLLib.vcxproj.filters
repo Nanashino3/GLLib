@@ -11,6 +11,9 @@
     <Filter Include="Library\System">
       <UniqueIdentifier>{671dcdae-f079-41e4-ab99-598d577d0e32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Library\Shader">
+      <UniqueIdentifier>{fc7ba578-2b00-43b7-826c-a13968d917b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,6 +40,9 @@
     <ClCompile Include="Input.cpp">
       <Filter>Library\System</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Library\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLLib.h">
@@ -44,11 +50,23 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="point.vert">
-      <Filter>Library</Filter>
-    </None>
     <None Include="point.frag">
-      <Filter>Library</Filter>
+      <Filter>Library\Shader</Filter>
+    </None>
+    <None Include="point.vert">
+      <Filter>Library\Shader</Filter>
+    </None>
+    <None Include="LambertVert.glsl">
+      <Filter>Library\Shader</Filter>
+    </None>
+    <None Include="LambertFrag.glsl">
+      <Filter>Library\Shader</Filter>
+    </None>
+    <None Include="PhongVert.glsl">
+      <Filter>Library\Shader</Filter>
+    </None>
+    <None Include="PhongFrag.glsl">
+      <Filter>Library\Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

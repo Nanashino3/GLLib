@@ -141,6 +141,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GLLib.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="System.cpp" />
@@ -150,6 +151,10 @@
     <ClInclude Include="GLLib.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LambertFrag.glsl" />
+    <None Include="LambertVert.glsl" />
+    <None Include="PhongFrag.glsl" />
+    <None Include="PhongVert.glsl" />
     <None Include="point.frag" />
     <None Include="point.vert" />
   </ItemGroup>

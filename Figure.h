@@ -8,7 +8,7 @@ public:
 	struct Vertex
 	{
 		GLfloat position[3];	// ˆÊ’u
-		GLfloat color[3];		// F
+		GLfloat normal[3];		// –@ü
 	};
 
 	Figure(GLint, GLsizei, const Vertex*, GLsizei indexCount = 0, const GLuint* index = 0);

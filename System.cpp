@@ -122,29 +122,33 @@ int System::DrawBox(float posX, float posY, float width, float height, unsigned 
 	}
 
 	//**********************************************
-	// モデルビュー行列作成
+	// ワールド変換行列作成
 
 	// モデル行列作成
 	Matrix sm = Matrix::Scale(width, height, 0.0f);
 	Matrix tm = Matrix::Translate(posX, -posY, 0.0f);
-	Matrix mm = tm * sm;
+	Matrix wm = tm * sm;
 
-	// モデルビュー行列
+	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
+	//**********************************************
+
+	//**********************************************
+	// ビュー射影行列作成
+
+	// ビュー行列として扱う
 	Matrix vm = Matrix::Identity();
-	Matrix mvm = vm * mm;
 
-	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
-	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, mvm.Data());
-	//**********************************************
-
-	//**********************************************
-	// 射影行列作成
+	// 射影行列を作成
 	const GLfloat* windowSize = mWindow->GetWindowSize();
 	GLfloat w = windowSize[0] / 2.0f, h = windowSize[1] / 2.0f;
 	Matrix pm = Matrix::OrthogonalProjection(-w, w, -h, h, 1.0f, -1.0f);
 
-	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
+	// 行列をまとめる
+	Matrix vpm = pm * vm;
+
+	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
 	//**********************************************
 
 	if(mRectagle != nullptr){ mRectagle->Draw(); }
@@ -158,40 +162,40 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
 			// 左面
-			{ -1.0f, -1.0f, -1.0f, 0.1f, 0.8f, 0.1f },
-			{ -1.0f, -1.0f,  1.0f, 0.1f, 0.8f, 0.1f },
-			{ -1.0f,  1.0f,  1.0f, 0.1f, 0.8f, 0.1f },
-			{ -1.0f,  1.0f, -1.0f, 0.1f, 0.8f, 0.1f },
+			{ -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
+			{ -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
+			{ -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
+			{ -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
 			
 			// 裏面
-			{  1.0f, -1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
-			{ -1.0f, -1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
-			{ -1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
-			{  1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.8f },
+			{  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
+			{ -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
+			{ -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
+			{  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
 
 			// 下面
-			{ -1.0f, -1.0f, -1.0f, 0.1f, 0.8f, 0.8f },
-			{  1.0f, -1.0f, -1.0f, 0.1f, 0.8f, 0.8f },
-			{  1.0f, -1.0f,  1.0f, 0.1f, 0.8f, 0.8f },
-			{ -1.0f, -1.0f,  1.0f, 0.1f, 0.8f, 0.8f },
+			{ -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
+			{  1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
+			{  1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
+			{ -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
 
 			// 右面
-			{  1.0f, -1.0f,  1.0f, 0.1f, 0.1f, 0.8f },
-			{  1.0f, -1.0f, -1.0f, 0.1f, 0.1f, 0.8f },
-			{  1.0f,  1.0f, -1.0f, 0.1f, 0.1f, 0.8f },
-			{  1.0f,  1.0f,  1.0f, 0.1f, 0.1f, 0.8f },
+			{  1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
 
 			// 上面
-			{ -1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.1f },
-			{ -1.0f,  1.0f,  1.0f, 0.8f, 0.1f, 0.1f },
-			{  1.0f,  1.0f,  1.0f, 0.8f, 0.1f, 0.1f },
-			{  1.0f,  1.0f, -1.0f, 0.8f, 0.1f, 0.1f },
+			{ -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
+			{ -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+			{  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+			{  1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
 
 			// 前面
-			{ -1.0f, -1.0f,  1.0f, 0.8f, 0.8f, 0.1f },
-			{  1.0f, -1.0f,  1.0f, 0.8f, 0.8f, 0.1f },
-			{  1.0f,  1.0f,  1.0f, 0.8f, 0.8f, 0.1f },
-			{ -1.0f,  1.0f,  1.0f, 0.8f, 0.8f, 0.1f }
+			{ -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+			{  1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+			{  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+			{ -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f }
 		};
 
 		GLuint indices[] = {
@@ -213,26 +217,31 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	}
 
 	//**********************************************
-	// モデルビュー行列作成
+	// ワールド変換行列作成
 	
-	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(1.0f, 0.0f, 1.0f));
+	Matrix wm = rm * Matrix::Translate(posX, -posY, posZ);
 
-	Matrix mm = rm * Matrix::Translate(posX, -posY, posZ);
+	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
+	//**********************************************
+
+	//**********************************************
+	// ビュー射影行列作成
+
+	// ビュー行列作成
 	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-	Matrix mvm = vm * mm;
 
-	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
-	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, mvm.Data());
-	//**********************************************
-
-	//**********************************************
 	// 射影行列作成
 	const GLfloat* windowSize = mWindow->GetWindowSize();
 	GLfloat aspect = windowSize[0] / windowSize[1];
 	Matrix pm = Matrix::PerspectiveProjection(90.0f, aspect, 1.0f, -1.0f);
 
-	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
+	// 行列をまとめる
+	Matrix vpm = pm * vm;
+
+	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
 	//**********************************************
 
 	if (mRectagle != nullptr) { mRectagle->Draw(); }
@@ -271,11 +280,6 @@ int System::DrawSphere(float posX, float posY, float posZ, float radius, int div
 				int v2 = v1 + divWidth;				// 左下
 				int v3 = v2 + 1;					// 右下
 
-				std::cout << std::setw(3) << v0 << " " << 
-							 std::setw(3) << v1 << " " << 
-							 std::setw(3) << v2 << " " <<
-							 std::setw(3) << v3 << std::endl;
-
 				// 左下の三角形
 				sphereIndex.emplace_back(v0);
 				sphereIndex.emplace_back(v2);
@@ -294,26 +298,62 @@ int System::DrawSphere(float posX, float posY, float posZ, float radius, int div
 			static_cast<GLsizei>(sphereIndex.size()), sphereIndex.data());
 	}
 
+	Vector3 camPos = Vector3(3.0f, 4.0f, 5.0f);
+
 	//**********************************************
-	// モデルビュー行列作成
+	// ワールド変換行列作成
+
 	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix wm = rm * Matrix::Translate(posX, -posY, posZ);
 
-	Matrix mm = rm * Matrix::Translate(posX, -posY, posZ);
-	Matrix vm = Matrix::LookAt(Vector3(2.0f, 3.0f, 4.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-	Matrix mvm = vm * mm;
-
-	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
-	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, mvm.Data());
+	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
 	//**********************************************
 
 	//**********************************************
+	// ビュー射影行列作成
+
+	// ビュー行列作成
+	Matrix vm = Matrix::LookAt(camPos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+
 	// 射影行列作成
 	const GLfloat* windowSize = mWindow->GetWindowSize();
 	GLfloat aspect = windowSize[0] / windowSize[1];
 	Matrix pm = Matrix::PerspectiveProjection(60.0f, aspect, 1.0f, -1.0f);
 
-	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "projection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, pm.Data());
+	// 行列をまとめる
+	Matrix vpm = pm * vm;
+
+	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
+	//**********************************************
+
+	//**********************************************
+	// 光源設定
+	// ライティングパラメータ設定
+	Vector3 ambientLight = Vector3(0.2f, 0.2f, 0.2f);
+	Vector3 dirLightDirection = Vector3(0.0f, -0.707f, -0.707f);
+	Vector3 dirLightDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
+	Vector3 dirLightSpecColor = Vector3(0.8f, 0.8f, 0.8f);
+
+	GLuint camPosLoc = glGetUniformLocation(mShaderProgram, "uCameraPos");
+	glUniform3fv(camPosLoc, 1, camPos.GetAsFloatPtr());
+
+	GLuint ambentLightLoc = glGetUniformLocation(mShaderProgram, "uAmbientColor");
+	glUniform3fv(ambentLightLoc, 1, ambientLight.GetAsFloatPtr());
+
+	GLuint lightDirLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mDirection");
+	glUniform3fv(lightDirLoc, 1, dirLightDirection.GetAsFloatPtr());
+
+	GLuint lightDiffuseLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mDiffuseColor");
+	glUniform3fv(lightDiffuseLoc, 1, dirLightDiffuseColor.GetAsFloatPtr());
+
+	GLuint lightSpecLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mSpecColor");
+	glUniform3fv(lightSpecLoc, 1, dirLightSpecColor.GetAsFloatPtr());
+
+	GLuint specPowerLoc = glGetUniformLocation(mShaderProgram, "uSpecPower");
+	glUniform1f(specPowerLoc, 2.0f);
+
 	//**********************************************
 
 	if(mSphere != nullptr){ mSphere->Draw(); }

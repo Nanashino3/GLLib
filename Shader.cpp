@@ -92,8 +92,8 @@ unsigned int CreateShader(const char* vertexSrc, const char* fragmentSrc)
 
 	// äeéÌëÆê´ÇÉäÉìÉNÇ∑ÇÈ
 	glBindAttribLocation(program, 0, "inPosition");
-	glBindAttribLocation(program, 1, "inColor");
-	glBindFragDataLocation(program, 0, "fragment");
+	glBindAttribLocation(program, 1, "inNormal");
+	glBindFragDataLocation(program, 0, "outColor");
 	glLinkProgram(program);
 
 	if(PrintProgramInfoLog(program)){ return static_cast<unsigned int>(program); }
@@ -163,6 +163,20 @@ Shader::~Shader()
 
 void Shader::Initialize(const Window& window)
 {
-	mShader = Load2DShader("point.vert", "point.frag");
+//	mShader = Load2DShader("point.vert", "point.frag");
+//	mShader = Load2DShader("LambertVert.glsl", "LambertFrag.glsl");
+	mShader = Load2DShader("PhongVert.glsl", "PhongFrag.glsl");
 	glUseProgram(mShader);
+}
+
+void Shader::SetMatrixUniform(const char* name, const Matrix& matrix)
+{
+	GLuint location = glGetUniformLocation(mShader, name);
+	glUniformMatrix4fv(location, 1, GL_TRUE, matrix.Data());
+}
+
+void Shader::SetVectorUniform(const char* name, const Vector3& vector)
+{
+	GLuint location = glGetUniformLocation(mShader, name);
+	glUniform3fv(location, 1, vector.GetAsFloatPtr());
 }

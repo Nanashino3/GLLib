@@ -21,7 +21,7 @@ Figure::Figure(GLint dimension, GLsizei vertexNum, const Vertex* vertex, GLsizei
 	glVertexAttribPointer(0, dimension, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<Vertex*>(0)->position);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, dimension, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<Vertex*>(0)->color);
+	glVertexAttribPointer(1, dimension, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<Vertex*>(0)->normal);
 	glEnableVertexAttribArray(1);
 }
 
