@@ -10,23 +10,27 @@ public:
 	const float* GetAsFloatPtr() const{ return reinterpret_cast<const float*>(&mX); }
 
 	// 加算
-	Vector3 operator+(const Vector3& v) const
+	friend Vector3 operator+(const Vector3& a, const Vector3& b)
 	{
-		Vector3 temp;
-		temp.mX = mX + v.mX;
-		temp.mY = mY + v.mY;
-		temp.mZ = mZ + v.mZ;
-		return temp;
+		return Vector3(a.mX + b.mX, a.mY + b.mY, a.mZ + b.mZ);
 	}
 
 	// 減算
-	Vector3 operator-(const Vector3& v) const
+	friend Vector3 operator-(const Vector3& a, const Vector3& b)
 	{
-		Vector3 temp;
-		temp.mX = mX - v.mX;
-		temp.mY = mY - v.mY;
-		temp.mZ = mZ - v.mZ;
-		return temp;
+		return Vector3(a.mX - b.mX, a.mY - b.mY, a.mZ - b.mZ);
+	}
+
+	// ベクトル同士の乗算
+	friend Vector3 operator*(const Vector3& a, const Vector3& b)
+	{
+		return Vector3(a.mX * b.mX, a.mY * b.mY, a.mZ * b.mZ);
+	}
+
+	// スカラーとベクトルの乗算
+	friend Vector3 operator*(const float s, const Vector3& a)
+	{
+		return Vector3(s * a.mX, s * a.mY, s * a.mZ);
 	}
 
 	// ベクトルの正規化

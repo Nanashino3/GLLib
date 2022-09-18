@@ -10,6 +10,7 @@
 #include "Shader.h"
 #include "Shape.h"
 #include "Matrix.h"
+#include "Quaternion.h"
 
 #include "Input.h"
 
@@ -216,6 +217,8 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 		mRectagle = std::make_unique<Shape>(3, 24, vertices, indicesNum, indices);
 	}
 
+	Vector3 camPos = Vector3(3.0f, 4.0f, 5.0f);
+
 	//**********************************************
 	// ワールド変換行列作成
 	
@@ -230,7 +233,7 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	// ビュー射影行列作成
 
 	// ビュー行列作成
-	Matrix vm = Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix vm = Matrix::LookAt(camPos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 
 	// 射影行列作成
 	const GLfloat* windowSize = mWindow->GetWindowSize();
@@ -243,6 +246,37 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
 	//**********************************************
+
+	//**********************************************
+	// 光源設定
+	// ライティングパラメータ設定
+	Vector3 ambientLight = Vector3(0.2f, 0.2f, 0.2f);
+	Vector3 dirLightDirection = Vector3(0.0f, -0.707f, -0.707f);
+	Vector3 dirLightDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
+	Vector3 dirLightSpecColor = Vector3(0.8f, 0.8f, 0.8f);
+
+	GLuint camPosLoc = glGetUniformLocation(mShaderProgram, "uCameraPos");
+	glUniform3fv(camPosLoc, 1, camPos.GetAsFloatPtr());
+
+	GLuint ambentLightLoc = glGetUniformLocation(mShaderProgram, "uAmbientColor");
+	glUniform3fv(ambentLightLoc, 1, ambientLight.GetAsFloatPtr());
+
+	GLuint lightDirLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mDirection");
+	glUniform3fv(lightDirLoc, 1, dirLightDirection.GetAsFloatPtr());
+
+	GLuint lightDiffuseLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mDiffuseColor");
+	glUniform3fv(lightDiffuseLoc, 1, dirLightDiffuseColor.GetAsFloatPtr());
+
+	GLuint lightSpecLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mSpecColor");
+	glUniform3fv(lightSpecLoc, 1, dirLightSpecColor.GetAsFloatPtr());
+
+	GLuint specPowerLoc = glGetUniformLocation(mShaderProgram, "uSpecPower");
+	glUniform1f(specPowerLoc, 2.0f);
+
+	//**********************************************
+
+
+	Quaternion q = Quaternion({1.0f, 0.0f, 0.0f}, 45.0f);
 
 	if (mRectagle != nullptr) { mRectagle->Draw(); }
 	return 0;

@@ -4,7 +4,7 @@
 #include <math.h>
 #include "Util.h"
 
-#include "Vector.h"
+#include "Vector3.h"
 
 // s—ñƒNƒ‰ƒX
 class Matrix

@@ -14,7 +14,7 @@ int main()
 	}
 
 	// ”wŒiF‚ğŒˆ’è
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	float x = 0.0f, y = 0.0f;
 	while(!tkl::ProcessMessage()){
@@ -36,8 +36,8 @@ int main()
 		}
 		
 //		tkl::DrawBox(x, y, 50, 50, -1, true);
-//		tkl::DrawCube(x, y, 0.0f, 50.0f, 50.0f, -1, true);
-		tkl::DrawSphere(x, y, 0.0f, 1.0f, 24, 16);
+		tkl::DrawCube(x, y, 0.0f, 50.0f, 50.0f, -1, true);
+//		tkl::DrawSphere(x, y, 0.0f, 1.0f, 24, 16);
 
 		tkl::SwapBuffers();
 	}

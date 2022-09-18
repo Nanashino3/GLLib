@@ -50,10 +50,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="point.frag">
+    <None Include="PointFrag.glsl">
       <Filter>Library\Shader</Filter>
     </None>
-    <None Include="point.vert">
+    <None Include="PointVert.glsl">
       <Filter>Library\Shader</Filter>
     </None>
     <None Include="LambertVert.glsl">
