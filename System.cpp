@@ -219,31 +219,21 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	}
 
 	//**********************************************
-	// ワールド変換行列作成
-	Matrix wm = Matrix::Scale(width, height, depth);
-#if 0
-	Vector3 camPos = Vector3(0.0f, 0.0f, 5.0f);			// カメラ位置
-	Vector3 targetPos = Vector3(0.0f, 0.0f, 0.0f);		// 注視点
-	Vector3 upVector = Vector3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
+	// ワールド変換行列作成(右手座標形なので「平行→回転→拡縮」の順)
 
-	wm *= Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(1.0f, 0.0f, 0.0f));
-	wm *= Matrix::Translate(posX, -posY, posZ);
-#else
 	// カメラ情報を設定
 	Vector3 camPos = Vector3(4.0f, 3.0f, 5.0f);
 	Vector3 targetPos = Vector3(0.0f, 0.0f, 0.0f);
 	Vector3 upVector = Vector3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
 
-	//**********************************************
-	// おそらくここをなんとかすれば四角形がまわる
-	Vector3 pos = Quaternion::Transform(Vector3(0.0f, 1.0f, 0.0f), mRotation);
-	mRotation *= Quaternion::AngleAxis(pos, ToRadian(-1.0f));
+	// オブジェクトで回っていない
+	mRotation *= Quaternion::AngleAxis(Vector3(1.0f, 0.0f, 0.0f), ToRadian(1.0f));	// X軸回転
+//	mRotation *= Quaternion::AngleAxis(Vector3(0.0f, 1.0f, 0.0f), ToRadian(1.0f));	// Y軸回転
+//	mRotation *= Quaternion::AngleAxis(Vector3(0.0f, 0.0f, 1.0f), ToRadian(1.0f));	// Z軸回転
 
-	//**********************************************
-
+	Matrix wm = Matrix::Translate(posX, -posY, posZ);
 	wm *= Matrix::CreateQuaternion(mRotation);
-	wm *= Matrix::Translate(posX, -posY, posZ);
-#endif
+	wm *= Matrix::Scale(width, height, depth);
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
