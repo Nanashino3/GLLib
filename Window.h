@@ -5,7 +5,7 @@
 class Window
 {
 public:
-	Window(int width = 640, int height = 480, const char* title = "Hello");
+	Window(int width = 1024, int height = 768, const char* title = "Hello");
 	~Window();
 
 	bool IsWindowShouldClose() const;

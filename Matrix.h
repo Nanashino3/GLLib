@@ -5,6 +5,7 @@
 #include "Util.h"
 
 #include "Vector3.h"
+#include "Quaternion.h"
 
 // 行列クラス
 class Matrix
@@ -36,6 +37,11 @@ public:
 		}
 
 		return temp;
+	}
+	Matrix& operator*=(const Matrix& m)
+	{
+		*this = *this * m;
+		return *this;
 	}
 
 	// 変換行列の配列を返す
@@ -211,6 +217,27 @@ public:
 			temp[14] = -2.0f * far * near / fsn;
 			temp[15] = 0.0f;
 		}
+		return temp;
+	}
+
+	// クォータニオン行列の作成
+	static Matrix CreateQuaternion(const Quaternion& q)
+	{
+		Matrix temp;
+		temp.LoadIdentity();
+
+		temp[0]  = 1.0f - 2.0f * q.mY * q.mY - 2.0f * q.mZ * q.mZ;
+		temp[1]  = 2.0f * q.mX * q.mY + 2.0f * q.mW * q.mZ;
+		temp[2]  = 2.0f * q.mX * q.mZ - 2.0f * q.mW * q.mY;
+
+		temp[4]  = 2.0f * q.mX * q.mY - 2.0f * q.mW * q.mZ;
+		temp[5]  = 1.0f - 2.0f * q.mX * q.mX - 2.0f * q.mZ * q.mZ;
+		temp[6]  = 2.0f * q.mY * q.mZ + 2.0f * q.mW * q.mX;
+
+		temp[8]  = 2.0f * q.mX * q.mZ + 2.0f * q.mW * q.mY;
+		temp[9]  = 2.0f * q.mY * q.mZ - 2.0f * q.mW * q.mX;
+		temp[10] = 1.0f - 2.0f * q.mX * q.mX - 2.0f * q.mY * q.mY;
+		
 		return temp;
 	}
 

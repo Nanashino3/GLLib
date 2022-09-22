@@ -14,11 +14,25 @@ public:
 	{
 		return Vector3(a.mX + b.mX, a.mY + b.mY, a.mZ + b.mZ);
 	}
+	Vector3& operator+=(const Vector3& a)
+	{
+		mX += a.mX;
+		mY += a.mY;
+		mZ += a.mZ;
+		return *this;
+	}
 
 	// Œ¸Z
 	friend Vector3 operator-(const Vector3& a, const Vector3& b)
 	{
 		return Vector3(a.mX - b.mX, a.mY - b.mY, a.mZ - b.mZ);
+	}
+	Vector3& operator-=(const Vector3& a)
+	{
+		mX -= a.mX;
+		mY -= a.mY;
+		mZ -= a.mZ;
+		return *this;
 	}
 
 	// ƒxƒNƒgƒ‹“¯m‚ÌæZ
@@ -46,7 +60,7 @@ public:
 	}
 
 	// “àÏ
-	static GLfloat Dot(const Vector3& v1, const Vector3& v2)
+	static float Dot(const Vector3& v1, const Vector3& v2)
 	{
 		return v1.mX * v2.mX + v1.mY * v2.mY + v1.mZ * v2.mZ;
 	}
@@ -61,7 +75,7 @@ public:
 		return temp;
 	}
 
-	static GLfloat Length(const Vector3& v)
+	static float Length(const Vector3& v)
 	{
 		return sqrtf(v.mX * v.mX + v.mY * v.mY + v.mZ * v.mZ);
 	}

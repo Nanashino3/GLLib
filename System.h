@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "Quaternion.h"
 
 namespace tkl{
 	class Input;
@@ -25,7 +26,7 @@ public:
 	int DrawBox(float, float, float, float, unsigned int, int);
 
 	// 3D関連描画
-	int DrawCube(float, float, float, float, float, unsigned int, int);
+	int DrawCube(float, float, float, float, float, float, unsigned int, int);
 	int DrawSphere(float, float, float, float, int, int);
 
 private:
@@ -44,4 +45,7 @@ private:
 	unsigned int mModelViewLoc;
 	unsigned int mProjectionLoc;
 	unsigned int mShaderProgram;		// シェーダオブジェクト
+
+
+	Quaternion mRotation;
 };

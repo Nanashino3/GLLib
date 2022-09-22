@@ -10,7 +10,7 @@
 #include "Shader.h"
 #include "Shape.h"
 #include "Matrix.h"
-#include "Quaternion.h"
+//#include "Quaternion.h"
 
 #include "Input.h"
 
@@ -18,6 +18,7 @@ System* System::sInstance = nullptr;
 System::System()
 : mWindow(nullptr)
 , mShaderProgram(-1)
+, mRotation(Quaternion())
 {}
 
 System* System::GetInstance()
@@ -157,7 +158,7 @@ int System::DrawBox(float posX, float posY, float width, float height, unsigned 
 }
 
 // 3Dボックス
-int System::DrawCube(float posX, float posY, float posZ, float width, float height, unsigned int color, int fillFlag)
+int System::DrawCube(float posX, float posY, float posZ, float width, float height, float depth, unsigned int color, int fillFlag)
 {
 	glUseProgram(mShaderProgram);
 	if (mRectagle == nullptr) {
@@ -217,13 +218,32 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 		mRectagle = std::make_unique<Shape>(3, 24, vertices, indicesNum, indices);
 	}
 
-	Vector3 camPos = Vector3(3.0f, 4.0f, 5.0f);
-
 	//**********************************************
 	// ワールド変換行列作成
-	
-	Matrix rm = Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(1.0f, 0.0f, 1.0f));
-	Matrix wm = rm * Matrix::Translate(posX, -posY, posZ);
+	Matrix wm = Matrix::Scale(width, height, depth);
+#if 0
+	Vector3 camPos = Vector3(0.0f, 0.0f, 5.0f);			// カメラ位置
+	Vector3 targetPos = Vector3(0.0f, 0.0f, 0.0f);		// 注視点
+	Vector3 upVector = Vector3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
+
+	wm *= Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(1.0f, 0.0f, 0.0f));
+	wm *= Matrix::Translate(posX, -posY, posZ);
+#else
+	// カメラ情報を設定
+	Vector3 camPos = Vector3(4.0f, 3.0f, 5.0f);
+	Vector3 targetPos = Vector3(0.0f, 0.0f, 0.0f);
+	Vector3 upVector = Vector3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
+
+	//**********************************************
+	// おそらくここをなんとかすれば四角形がまわる
+	Vector3 pos = Quaternion::Transform(Vector3(0.0f, 1.0f, 0.0f), mRotation);
+	mRotation *= Quaternion::AngleAxis(pos, ToRadian(-1.0f));
+
+	//**********************************************
+
+	wm *= Matrix::CreateQuaternion(mRotation);
+	wm *= Matrix::Translate(posX, -posY, posZ);
+#endif
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
@@ -233,7 +253,7 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	// ビュー射影行列作成
 
 	// ビュー行列作成
-	Matrix vm = Matrix::LookAt(camPos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix vm = Matrix::LookAt(camPos, targetPos, upVector);
 
 	// 射影行列作成
 	const GLfloat* windowSize = mWindow->GetWindowSize();
@@ -274,9 +294,6 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	glUniform1f(specPowerLoc, 2.0f);
 
 	//**********************************************
-
-
-	Quaternion q = Quaternion({1.0f, 0.0f, 0.0f}, 45.0f);
 
 	if (mRectagle != nullptr) { mRectagle->Draw(); }
 	return 0;
