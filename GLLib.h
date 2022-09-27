@@ -12,10 +12,9 @@ void LibraryEnd();
 int DrawBox(float, float, float, float, unsigned int, int);
 int DrawCube(float, float, float, float, float, float, unsigned int, int);
 int DrawSphere(float, float, float, float, int, int);
+int DrawPlane(float, float, float, float, float, float, unsigned int, int);
 
-void AmbientLight();
 void DirectionalLight();
-void PointLight();
-void Spotlight();
+void DrawGridGround(float, int, unsigned int color = 0x99999999);
 
 }

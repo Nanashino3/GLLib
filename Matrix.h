@@ -203,19 +203,33 @@ public:
 	}
 
 	// ìßéãéÀâeçsóÒ
-	static Matrix PerspectiveProjection(GLfloat degree, GLfloat aspect, GLfloat near, GLfloat far)
+	static Matrix PerspectiveProjection(GLfloat angle, GLfloat aspect, GLfloat near, GLfloat far)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
-		GLfloat fovy = ToRadian(degree);
+		GLfloat fovy = ToRadian(angle);
+
+#if 0
 		GLfloat fsn = far - near;
 		if(fsn != 0.0f){
+
 			temp[5]	 = 1.0f / tanf(fovy * 0.5f);
 			temp[0]  = temp[5] / aspect;
 			temp[10] = -(far + near) / fsn;
 			temp[11] = -1.0f;
 			temp[14] = -2.0f * far * near / fsn;
 			temp[15] = 0.0f;
+		}
+#else
+		GLfloat nsf = near - far;
+		if (nsf != 0.0f) {
+			temp[5]  = 1.0f / tanf(fovy * 0.5f);
+			temp[0]  = temp[5] / aspect;
+			temp[10] = (near + far) / nsf;
+			temp[11] = -1.0f;
+			temp[14] = 2.0f * far * near / nsf;
+			temp[15] = 0.0f;
+#endif
 		}
 		return temp;
 	}

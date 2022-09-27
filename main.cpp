@@ -22,22 +22,30 @@ int main()
 		
 		if(tkl::Input::IsKeyDown(eKeys::KB_A)){
 			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
-			x -= 0.1f;
+			x -= 1.0f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_D)){
 			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
-			x += 0.1f;
+			x += 1.0f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_S)){
-			z -= 0.1f;
+			y += 1.0f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
-			z += 0.1f;
+			y -= 1.0f;
 		}
 		
-//		tkl::DrawBox(x, y, 50, 50, -1, true);
-		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-//		tkl::DrawSphere(x, y, 0.0f, 1.0f, 24, 16);
+		// 2D}Œ`
+//		tkl::DrawBox(x, y, 32, 32, -1, true);
+
+		// 3D}Œ`
+//		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+//		tkl::DrawSphere(x, y, z, 1.0f, 24, 16);
+//		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+
+		// ‚»‚Ì‘¼
+		tkl::DirectionalLight();
+		tkl::DrawGridGround(50, 10);
 
 		tkl::SwapBuffers();
 	}

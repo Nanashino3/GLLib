@@ -39,4 +39,19 @@ int DrawSphere(float posX, float posY, float posZ, float radius, int divWidth, i
 	return System::GetInstance()->DrawSphere(posX, posY, posZ, radius, divWidth, divHeight);
 }
 
+int DrawPlane(float posX, float posY, float posZ, float width, float height, float depth, unsigned int color, int fillFlag)
+{
+	return System::GetInstance()->DrawPlane(posX, posY, posZ, width, height, depth, color, fillFlag);
+}
+
+void DirectionalLight()
+{
+	System::GetInstance()->DirectionalLight();
+}
+
+void DrawGridGround(float size, int rowNum, unsigned int color)
+{
+	System::GetInstance()->DrawGridGround(size, rowNum, color);
+}
+
 }

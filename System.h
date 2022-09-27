@@ -28,6 +28,11 @@ public:
 	// 3D関連描画
 	int DrawCube(float, float, float, float, float, float, unsigned int, int);
 	int DrawSphere(float, float, float, float, int, int);
+	int DrawPlane(float, float, float, float, float, float, unsigned int, int);
+
+	void DirectionalLight();
+
+	void DrawGridGround(float, int, unsigned int);
 
 private:
 	System();
@@ -39,8 +44,10 @@ private:
 	std::unique_ptr<Window> mWindow;	// ウィンドウのポインタ
 	std::unique_ptr<Shader> mShader;	// シェーダのポインタ
 
+	std::unique_ptr<Shape> mLine;		// 線
 	std::unique_ptr<Shape> mRectagle;	// 四角用
 	std::unique_ptr<Shape> mSphere;		// 球
+	std::unique_ptr<Shape> mPlane;		// 平面
 
 	unsigned int mModelViewLoc;
 	unsigned int mProjectionLoc;

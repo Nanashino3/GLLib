@@ -3,7 +3,6 @@
 Shape::Shape(GLint dimension, GLsizei vertexNum, const Figure::Vertex* vertex, GLsizei indexNum, const GLuint* index)
 : mFigure(std::make_shared<const Figure>(dimension, vertexNum, vertex, indexNum, index))
 , mVertexNum(vertexNum)
-, mIndexNum(indexNum)
 {}
 
 Shape::~Shape()
@@ -21,6 +20,5 @@ void Shape::Draw() const
 // •`‰æŠJn
 void Shape::Execute() const
 {
-	// Ü‚êü‚Å•`‰æ
-	glDrawElements(GL_TRIANGLES, mIndexNum, GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_LINES, 0, mVertexNum);
 }

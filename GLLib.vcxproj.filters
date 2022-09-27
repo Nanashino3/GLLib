@@ -31,7 +31,7 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Library\System</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
+    <ClCompile Include="ShapeIndex.cpp">
       <Filter>Library\System</Filter>
     </ClCompile>
     <ClCompile Include="Figure.cpp">
@@ -41,6 +41,9 @@
       <Filter>Library\System</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
+      <Filter>Library\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
       <Filter>Library\System</Filter>
     </ClCompile>
   </ItemGroup>
