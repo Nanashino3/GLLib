@@ -67,8 +67,6 @@ bool System::Initialize()
 
 	mShaderProgram = mShader->GetShaderProgram();
 
-	mModelViewLoc = glGetUniformLocation(mShaderProgram, "modelView");
-	mProjectionLoc = glGetUniformLocation(mShaderProgram, "projection");
 	return true;
 }
 
@@ -217,25 +215,11 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 
 	GLint worldTransformLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(worldTransformLoc, 1, GL_FALSE, wm.Data());
-	//**********************************************
 
 	//**********************************************
 	// ビュー射影行列作成
-
-	// 射影行列作成
-	const GLfloat* windowSize = mWindow->GetWindowSize();
-	GLfloat aspect = windowSize[0] / windowSize[1];
-	Matrix vpm = Matrix::PerspectiveProjection(90.0f, aspect, 0.1f, 1000.0f);
-
-	// ビュー行列作成
-	Vector3 camPos = Vector3(0.0f, 0.0f, 5.0f);			// カメラ位置
-	Vector3 targetPos = Vector3(0.0f, 0.0f, 0.0f);		// 注視位置
-	Vector3 upVector = Vector3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
-	vpm *= Matrix::LookAt(camPos, targetPos, upVector);
-
-	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
-	//**********************************************
+	GLint viewProjectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	glUniformMatrix4fv(viewProjectionLoc, 1, GL_FALSE, mViewProjection.Data());
 
 	if (mRectagle != nullptr) { mRectagle->Draw(); }
 	return 0;
@@ -305,18 +289,8 @@ int System::DrawSphere(float posX, float posY, float posZ, float radius, int div
 
 	//**********************************************
 	// ビュー射影行列作成
-
-	// 射影行列作成
-	const GLfloat* windowSize = mWindow->GetWindowSize();
-	GLfloat aspect = windowSize[0] / windowSize[1];
-	Matrix vpm = Matrix::PerspectiveProjection(60.0f, aspect, 1.0f, -1.0f);
-
-	// ビュー行列作成
-	vpm *= Matrix::LookAt(camPos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-
 	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
-	//**********************************************
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, mViewProjection.Data());
 
 	if(mSphere != nullptr){ mSphere->Draw(); }
 
@@ -359,18 +333,8 @@ int System::DrawPlane(float posX, float posY, float posZ, float width, float hei
 
 	//**********************************************
 	// ビュー射影行列作成
-
-	// 射影行列作成
-	const GLfloat* windowSize = mWindow->GetWindowSize();
-	GLfloat aspect = windowSize[0] / windowSize[1];
-	Matrix vpm = Matrix::PerspectiveProjection(60.0f, aspect, 1.0f, -1.0f);
-
-	// ビュー行列作成
-	vpm *= Matrix::LookAt(camPos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-
 	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
-	//**********************************************
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, mViewProjection.Data());
 
 	if(mPlane != nullptr){ mPlane->Draw(); }
 	return 0;
@@ -387,7 +351,7 @@ void System::DirectionalLight()
 	Vector3 ambientLight = Vector3(0.2f, 0.2f, 0.2f);
 	Vector3 dirLightDirection = Vector3(0.0f, -0.707f, -0.707f);
 	Vector3 dirLightDiffuseColor = Vector3(1.0f, 1.0f, 1.0f);
-//	Vector3 dirLightSpecColor = Vector3(0.8f, 0.8f, 0.8f);
+	Vector3 dirLightSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	GLuint camPosLoc = glGetUniformLocation(mShaderProgram, "uCameraPos");
 	glUniform3fv(camPosLoc, 1, camPos.GetAsFloatPtr());
@@ -401,11 +365,11 @@ void System::DirectionalLight()
 	GLuint lightDiffuseLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mDiffuseColor");
 	glUniform3fv(lightDiffuseLoc, 1, dirLightDiffuseColor.GetAsFloatPtr());
 
-//	GLuint lightSpecLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mSpecColor");
-//	glUniform3fv(lightSpecLoc, 1, dirLightSpecColor.GetAsFloatPtr());
+	GLuint lightSpecLoc = glGetUniformLocation(mShaderProgram, "uDirLight.mSpecColor");
+	glUniform3fv(lightSpecLoc, 1, dirLightSpecColor.GetAsFloatPtr());
 
-//	GLuint specPowerLoc = glGetUniformLocation(mShaderProgram, "uSpecPower");
-//	glUniform1f(specPowerLoc, 2.0f);
+	GLuint specPowerLoc = glGetUniformLocation(mShaderProgram, "uSpecPower");
+	glUniform1f(specPowerLoc, 2.0f);
 
 	//**********************************************
 }
@@ -460,18 +424,8 @@ void System::DrawGridGround(float size, int rowNum, unsigned int color)
 
 	//**********************************************
 	// ビュー射影行列作成
-
-	// 射影行列作成
-	const GLfloat* windowSize = mWindow->GetWindowSize();
-	GLfloat aspect = windowSize[0] / windowSize[1];
-	Matrix vpm = Matrix::PerspectiveProjection(60.0f, aspect, 1.0f, -1.0f);
-
-	// ビュー行列作成
-	vpm *= Matrix::LookAt(Vector3(3.0f, 4.0f, 5.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-
 	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
-	//**********************************************
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, mViewProjection.Data());
 
 	if(mLine != nullptr){ mLine->Draw(); }
 }

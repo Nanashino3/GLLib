@@ -163,8 +163,8 @@ Shader::~Shader()
 
 void Shader::Initialize(const Window& window)
 {
-	mShader = Load2DShader("PointVert.glsl", "PointFrag.glsl");
-//	mShader = Load2DShader("LambertVert.glsl", "LambertFrag.glsl");
+//	mShader = Load2DShader("PointVert.glsl", "PointFrag.glsl");
+	mShader = Load2DShader("LambertVert.glsl", "LambertFrag.glsl");
 //	mShader = Load2DShader("PhongVert.glsl", "PhongFrag.glsl");
 	glUseProgram(mShader);
 }

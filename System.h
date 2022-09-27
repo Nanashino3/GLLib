@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "Quaternion.h"
+#include "Matrix.h"
 
 namespace tkl{
 	class Input;
@@ -34,6 +34,8 @@ public:
 
 	void DrawGridGround(float, int, unsigned int);
 
+	void SetViewProjection(const Matrix& vpm){ mViewProjection = vpm; }
+
 private:
 	System();
 	System(const System&);
@@ -49,10 +51,9 @@ private:
 	std::unique_ptr<Shape> mSphere;		// 球
 	std::unique_ptr<Shape> mPlane;		// 平面
 
-	unsigned int mModelViewLoc;
-	unsigned int mProjectionLoc;
 	unsigned int mShaderProgram;		// シェーダオブジェクト
 
 
 	Quaternion mRotation;
+	Matrix mViewProjection;
 };

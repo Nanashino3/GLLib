@@ -2,6 +2,8 @@
 #include <iostream>
 
 #include "GLLib.h"
+
+#include "Camera.h"
 #include "Input.h"
 
 int main()
@@ -15,6 +17,9 @@ int main()
 
 	// îwåiêFÇåàíË
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	Camera* camera = new Camera();
+//	Mesh* cube = CreateCube();
 
 	float x = 0.0f, y = 0.0f, z = 0.0f;
 	while(!tkl::ProcessMessage()){
@@ -35,17 +40,12 @@ int main()
 			y -= 1.0f;
 		}
 		
-		// 2Dê}å`
-//		tkl::DrawBox(x, y, 32, 32, -1, true);
+		camera->Update();
 
-		// 3Dê}å`
 //		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-//		tkl::DrawSphere(x, y, z, 1.0f, 24, 16);
-//		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-
-		// ÇªÇÃëº
+//		tkl::DrawSphere(x, y, z, 1.0f, 16, 8);
+		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
 		tkl::DirectionalLight();
-		tkl::DrawGridGround(50, 10);
 
 		tkl::SwapBuffers();
 	}

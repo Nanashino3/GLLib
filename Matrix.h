@@ -1,11 +1,11 @@
 #pragma once
 
 #include <algorithm>
-#include <math.h>
 #include "Util.h"
-
-#include "Vector3.h"
 #include "Quaternion.h"
+
+class Vector3;
+class Quaternion;
 
 // 行列クラス
 class Matrix
@@ -13,14 +13,14 @@ class Matrix
 public:
 	// コンストラクタ
 	Matrix(){}
-	Matrix(const GLfloat* a)
+	Matrix(const float* a)
 	{
 		// 配列の内容で初期化
 		std::copy(a, a + 16, mMatrix);
 	}
 
-	const GLfloat& operator[](std::size_t i) const { return mMatrix[i]; }
-	GLfloat& operator[](std::size_t i){ return mMatrix[i]; }
+	const float& operator[](std::size_t i) const { return mMatrix[i]; }
+	float& operator[](std::size_t i){ return mMatrix[i]; }
 	
 	// 乗算
 	Matrix operator*(const Matrix& m) const
@@ -45,7 +45,7 @@ public:
 	}
 
 	// 変換行列の配列を返す
-	const GLfloat* Data() const{ return mMatrix; }
+	const float* Data() const{ return mMatrix; }
 
 	// 単位行列を作成
 	static Matrix Identity()
@@ -56,7 +56,7 @@ public:
 	}
 
 	// 平行移動行列を作成
-	static Matrix Translate(GLfloat x, GLfloat y, GLfloat z)
+	static Matrix Translate(float x, float y, float z)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
@@ -67,7 +67,7 @@ public:
 	}
 
 	// 拡大縮小行列作成
-	static Matrix Scale(GLfloat x, GLfloat y, GLfloat z)
+	static Matrix Scale(float x, float y, float z)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
@@ -78,13 +78,13 @@ public:
 	}
 
 	// X軸回転の行列作成
-	static Matrix RotationX(GLfloat x)
+	static Matrix RotationX(float x)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
 
-		float sin = std::sinf(x);
-		float cos = std::cosf(x);
+		float sin = sinf(x);
+		float cos = cosf(x);
 
 		temp[5]  = cos; temp[6]  = -sin;
 		temp[9]  = sin; temp[10] = cos;
@@ -92,13 +92,13 @@ public:
 	}
 
 	// Y軸回転の行列作成
-	static Matrix RotationY(GLfloat y)
+	static Matrix RotationY(float y)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
 
-		float sin = std::sinf(y);
-		float cos = std::cosf(y);
+		float sin = sinf(y);
+		float cos = cosf(y);
 
 		temp[0] =  cos;	temp[2]  = sin;
 		temp[8] = -sin; temp[10] = cos;
@@ -106,13 +106,13 @@ public:
 	}
 
 	// Z軸回転の行列作成
-	static Matrix RotationZ(GLfloat z)
+	static Matrix RotationZ(float z)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
 
-		float sin = std::sinf(z);
-		float cos = std::cosf(z);
+		float sin = sinf(z);
+		float cos = cosf(z);
 
 		temp[0] = cos; temp[1] = -sin;
 		temp[4] = sin; temp[5] =  cos;
@@ -120,14 +120,14 @@ public:
 	}
 
 	// 任意軸回転(方向余弦)
-	static Matrix Rotate(GLfloat rotate, Vector3 vec)
+	static Matrix Rotate(float rotate, const Vector3& vec)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
 
-		GLfloat length = Vector3::Length(vec);
-		GLfloat dx = vec.mX / length, dy = vec.mY / length, dz = vec.mZ / length;
-		GLfloat cos = std::cosf(rotate), sin = std::sinf(rotate);
+		float length = Vector3::Length(vec);
+		float dx = vec.mX / length, dy = vec.mY / length, dz = vec.mZ / length;
+		float cos = cosf(rotate), sin = sinf(rotate);
 
 		temp[0]  = dx * dx + (1.0f - dx * dx) * cos;
 		temp[1]  = dx * dy * (1.0f - cos) - dz * sin;
@@ -168,7 +168,7 @@ public:
 
 
 	// 単純なビュー射影行列
-	static Matrix SimpleViewProjection(GLfloat width, GLfloat height)
+	static Matrix SimpleViewProjection(float width, float height)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
@@ -180,17 +180,17 @@ public:
 	}
 	 
 	// 正射影行列
-	static Matrix OrthogonalProjection(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
+	static Matrix OrthogonalProjection(float left, float right, float bottom, float top, float near, float far)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
 
-		const GLfloat ral = right + left;	// right add left
-		const GLfloat rsl = right - left;	// right subtraction left
-		const GLfloat tab = top + bottom;	// top add bottom
-		const GLfloat tsb = top - bottom;	// top subtraction bottom
-		const GLfloat fan = far + near;		// far add near
-		const GLfloat fsn = far - near;		// far subtraction near
+		float ral = right + left;	// right add left
+		float rsl = right - left;	// right subtraction left
+		float tab = top + bottom;	// top add bottom
+		float tsb = top - bottom;	// top subtraction bottom
+		float fan = far + near;		// far add near
+		float fsn = far - near;		// far subtraction near
 
 		temp[0]  = 2.0f / rsl;
 		temp[5]  = 2.0f / tsb;
@@ -203,14 +203,13 @@ public:
 	}
 
 	// 透視射影行列
-	static Matrix PerspectiveProjection(GLfloat angle, GLfloat aspect, GLfloat near, GLfloat far)
+	static Matrix PerspectiveProjection(float angle, float aspect, float near, float far)
 	{
 		Matrix temp;
 		temp.LoadIdentity();
-		GLfloat fovy = ToRadian(angle);
+		float fovy = ToRadian(angle);
 
-#if 0
-		GLfloat fsn = far - near;
+		float fsn = far - near;
 		if(fsn != 0.0f){
 
 			temp[5]	 = 1.0f / tanf(fovy * 0.5f);
@@ -219,17 +218,6 @@ public:
 			temp[11] = -1.0f;
 			temp[14] = -2.0f * far * near / fsn;
 			temp[15] = 0.0f;
-		}
-#else
-		GLfloat nsf = near - far;
-		if (nsf != 0.0f) {
-			temp[5]  = 1.0f / tanf(fovy * 0.5f);
-			temp[0]  = temp[5] / aspect;
-			temp[10] = (near + far) / nsf;
-			temp[11] = -1.0f;
-			temp[14] = 2.0f * far * near / nsf;
-			temp[15] = 0.0f;
-#endif
 		}
 		return temp;
 	}
@@ -264,5 +252,5 @@ private:
 	}
 
 private:
-	GLfloat mMatrix[16];
+	float mMatrix[16];
 };

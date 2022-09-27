@@ -67,13 +67,6 @@ void Window::SwapBuffers() const
 
 void Window::Resize(GLFWwindow* const window, int width, int height)
 {
-	// フレームバッファサイズを確認
-	int frameBufWidth, frameBufHeight;
-	glfwGetFramebufferSize(window, &frameBufWidth, &frameBufHeight);
-
-	// フレームバッファ全体をビューポートに設定
-	glViewport(0, 0, frameBufWidth, frameBufHeight);
-
 	Window* const instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
 	if(instance != 0){
 		instance->mWindowSize[0] = static_cast<GLfloat>(width);
