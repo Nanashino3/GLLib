@@ -16,10 +16,11 @@ int main()
 	}
 
 	// îwåiêFÇåàíË
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	Camera* camera = new Camera();
-//	Mesh* cube = CreateCube();
+
+	tkl::LoadGraph("Assets/Ship.png");
 
 	float x = 0.0f, y = 0.0f, z = 0.0f;
 	while(!tkl::ProcessMessage()){
@@ -27,25 +28,30 @@ int main()
 		
 		if(tkl::Input::IsKeyDown(eKeys::KB_A)){
 			//std::cout << "AÇ™âüÇ≥ÇÍÇƒÇ¢Ç‹Ç∑" << std::endl;
-			x -= 1.0f;
+			x -= 0.1f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_D)){
 			//std::cout << "AÇ™âüÇ≥ÇÍÇƒÇ¢Ç‹Ç∑" << std::endl;
-			x += 1.0f;
+			x += 0.1f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_S)){
-			y += 1.0f;
+			y += 0.1f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
-			y -= 1.0f;
+			y -= 0.1f;
 		}
 		
-		camera->Update();
+//		camera->Update();
+
+//		tkl::DrawBox(x, y, 50.0f, 50.0f, -1, true);
+//		tkl::DrawGraph(x, y);
 
 //		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-//		tkl::DrawSphere(x, y, z, 1.0f, 16, 8);
-		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-		tkl::DirectionalLight();
+//		tkl::DrawSphere(x, y,  0.0f, 1.0f, 16, 8);
+//		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+//		tkl::DirectionalLight();
+
+//		tkl::DrawGridGround(50.0f, 10.0f);
 
 		tkl::SwapBuffers();
 	}

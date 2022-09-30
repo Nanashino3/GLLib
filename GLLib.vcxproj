@@ -104,15 +104,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\WorkSpace\Study\Library\glfw\include;C:\WorkSpace\Study\Library\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\WorkSpace\Study\Library\glfw\include;C:\WorkSpace\Study\Library\glew\include;C:\WorkSpace\Study\Library\SOIL\SOIL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\WorkSpace\Study\Library\glfw\lib-vc2022;C:\WorkSpace\Study\Library\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\WorkSpace\Study\Library\glfw\lib-vc2022;C:\WorkSpace\Study\Library\glew\lib\Release\x64;C:\WorkSpace\Study\Library\SOIL\SOIL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;user32.lib;gdi32.lib;shell32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -159,6 +159,8 @@
     <None Include="PhongVert.glsl" />
     <None Include="PointFrag.glsl" />
     <None Include="PointVert.glsl" />
+    <None Include="SpriteFrag.glsl" />
+    <None Include="SpriteVert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

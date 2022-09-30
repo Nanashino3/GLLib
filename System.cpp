@@ -5,6 +5,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <SOIL.h>
 
 #include "Window.h"
 #include "Shader.h"
@@ -17,6 +18,7 @@ System* System::sInstance = nullptr;
 System::System()
 : mWindow(nullptr)
 , mShaderProgram(-1)
+, mSimpleShaderProgram(-1)
 , mRotation(Quaternion())
 {}
 
@@ -66,6 +68,8 @@ bool System::Initialize()
 	mShader->Initialize(*mWindow.get());
 
 	mShaderProgram = mShader->GetShaderProgram();
+	mSimpleShaderProgram = mShader->GetSimpleShaderProgram();
+	mTexShaderProgram = mShader->GetTexShaderProgram();
 
 	return true;
 }
@@ -103,14 +107,14 @@ void System::Finalize()
 // 2D四角形
 int System::DrawBox(float posX, float posY, float width, float height, unsigned int color, int fillFlag)
 {
-	glUseProgram(mShaderProgram);
+	glUseProgram(mSimpleShaderProgram);
 
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
-			{ -1.0f,  1.0f,  0.0f,  1.0f,  0.0f,  0.0f}, // 左上
-			{  1.0f,  1.0f,  0.0f,	1.0f,  0.0f,  0.0f}, // 右上
-			{  1.0f, -1.0f,  0.0f,  1.0f,  0.0f,  0.0f}, // 右下
-			{ -1.0f, -1.0f,  0.0f,  1.0f,  0.0f,  0.0f}	 // 左下
+			{ -0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f}, // 左上
+			{  0.5f,  0.5f,  0.0f,	1.0f,  0.0f,  0.0f}, // 右上
+			{  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f}, // 右下
+			{ -0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f}	 // 左下
 		};
 		GLuint indices[] = {
 			0, 1, 2,
@@ -125,7 +129,7 @@ int System::DrawBox(float posX, float posY, float width, float height, unsigned 
 	Matrix wm = Matrix::Translate(posX, -posY, 0.0f);
 	wm *= Matrix::Scale(width, height, 0.0f);
 
-	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
+	GLint modelViewLoc = glGetUniformLocation(mSimpleShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
 	//**********************************************
 
@@ -135,7 +139,7 @@ int System::DrawBox(float posX, float posY, float width, float height, unsigned 
 	GLfloat w = windowSize[0] / 2.0f, h = windowSize[1] / 2.0f;
 	Matrix vpm = Matrix::OrthogonalProjection(-w, w, -h, h, 1.0f, -1.0f);
 
-	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	GLint projectionLoc = glGetUniformLocation(mSimpleShaderProgram, "uViewProjection");
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
 	//**********************************************
 
@@ -151,40 +155,40 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
 			// 左面
-			{ -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
-			{ -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
-			{ -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
-			{ -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
+			{ -1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
+			{ -1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
+			{ -1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
+			{ -1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
 			
 			// 裏面
-			{  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
-			{ -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
-			{ -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
-			{  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f },
+			{  1.0f, -1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
+			{ -1.0f, -1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
+			{ -1.0f,  1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
+			{  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
 
 			// 下面
-			{ -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
-			{  1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
-			{  1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
-			{ -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
+			{ -1.0f, -1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
+			{  1.0f, -1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
+			{  1.0f, -1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+			{ -1.0f, -1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
 
 			// 右面
-			{  1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
-			{  1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
-			{  1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
-			{  1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
+			{  1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
+			{  1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
+			{  1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
 
 			// 上面
-			{ -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
-			{ -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
-			{  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
-			{  1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
+			{ -1.0f,  1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
+			{ -1.0f,  1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
+			{  1.0f,  1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
+			{  1.0f,  1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
 
 			// 前面
-			{ -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
-			{  1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
-			{  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
-			{ -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f }
+			{ -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, -1.0f },
+			{  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, -1.0f },
+			{  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, -1.0f },
+			{ -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, -1.0f }
 		};
 
 		GLuint indices[] = {
@@ -303,10 +307,10 @@ int System::DrawPlane(float posX, float posY, float posZ, float width, float hei
 	glUseProgram(mShaderProgram);
 	if(mPlane == nullptr){
 		Figure::Vertex vertices[] = {
-			{-1.0,  1.0f, 0.0f, -1.0f, 0.0f, 0.0f},
-			{ 1.0,  1.0f, 0.0f, -1.0f, 0.0f, 0.0f},
-			{ 1.0, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f},
-			{-1.0, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f}
+			{-1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f},
+			{ 1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f},
+			{ 1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f},
+			{-1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f}
 		};
 
 		GLuint indices[] = {
@@ -318,14 +322,9 @@ int System::DrawPlane(float posX, float posY, float posZ, float width, float hei
 		mPlane = std::make_unique<ShapeIndex>(3, 4, vertices, indexNum, indices);
 	}
 
-	Vector3 camPos = Vector3(3.0f, 4.0f, 5.0f);
-
 	//**********************************************
 	// ワールド変換行列作成
 	Matrix wm = Matrix::Translate(posX, -posY, posZ);
-
-	Quaternion q = Quaternion::AngleAxis(Vector3(1.0f, 0.0f, 0.0f), ToRadian(90.0f));
-	wm *= Matrix::CreateQuaternion(q);
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
@@ -349,7 +348,7 @@ void System::DirectionalLight()
 	// 光源設定
 	// ライティングパラメータ設定
 	Vector3 ambientLight = Vector3(0.2f, 0.2f, 0.2f);
-	Vector3 dirLightDirection = Vector3(0.0f, -0.707f, -0.707f);
+	Vector3 dirLightDirection = Vector3(0.0f, 1.0f, 0.0f);
 	Vector3 dirLightDiffuseColor = Vector3(1.0f, 1.0f, 1.0f);
 	Vector3 dirLightSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
@@ -377,7 +376,7 @@ void System::DirectionalLight()
 // グリッド
 void System::DrawGridGround(float size, int rowNum, unsigned int color)
 {
-	glUseProgram(mShaderProgram);
+	glUseProgram(mSimpleShaderProgram);
 	if(mLine == nullptr){
 		float l = rowNum * 0.5f;
 		float n = -l;
@@ -418,14 +417,82 @@ void System::DrawGridGround(float size, int rowNum, unsigned int color)
 	//**********************************************
 	// ワールド変換行列作成
 	Matrix wm = Matrix::Translate(0.0f, 0.0f, 0.0f);
-	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
+	GLint modelViewLoc = glGetUniformLocation(mSimpleShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
 	//**********************************************
 
 	//**********************************************
 	// ビュー射影行列作成
-	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	GLint projectionLoc = glGetUniformLocation(mSimpleShaderProgram, "uViewProjection");
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, mViewProjection.Data());
 
 	if(mLine != nullptr){ mLine->Draw(); }
+}
+
+// 画像の読み込み
+int System::LoadGraph(const char* name)
+{
+	int channels = 0;
+	unsigned char* image = SOIL_load_image(name, &mTextureW, &mTextureH, &channels, SOIL_LOAD_AUTO);
+
+	if (image == nullptr) { return -1; }
+
+	int format = (channels == 4) ? GL_RGBA : GL_RGB;
+
+	glGenTextures(1, &mTextureID);
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, mTextureW, mTextureH, 0, format, GL_UNSIGNED_BYTE, image);
+
+	SOIL_free_image_data(image);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return 0;
+}
+
+void System::DrawGraph(float posX, float posY)
+{
+	glUseProgram(mTexShaderProgram);
+	if(mTexture == nullptr){
+		Figure::Vertex vertices[] = {
+			{-0.5f,  0.5f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f},
+			{ 0.5f,  0.5f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f,  0.0f},
+			{ 0.5f, -0.5f,  0.0f,  0.0f, 0.0f, 0.0f, 1.0f,  1.0f},
+			{-0.5f, -0.5f,  0.0f,  0.0f, 0.0f, 0.0f, 0.0f,  1.0f}
+		};
+
+		GLuint indices[] = {
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		GLsizei indicesNum = sizeof(indices) / sizeof(indices[0]);
+		mTexture = std::make_unique<ShapeIndex>(3, 4, vertices, indicesNum, indices);
+	}
+	//**********************************************
+	// ワールド変換行列作成
+	Matrix wm = Matrix::Translate(posX, -posY, 0.0f);
+	wm *= Matrix::Scale(mTextureW, mTextureH, 1.0f);
+
+	GLint modelViewLoc = glGetUniformLocation(mTexShaderProgram, "uWorldTransform");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
+
+	//**********************************************
+	// ビュー射影行列作成
+	const GLfloat* windowSize = mWindow->GetWindowSize();
+	GLfloat w = windowSize[0] / 2.0f, h = windowSize[1] / 2.0f;
+	Matrix vpm = Matrix::OrthogonalProjection(-w, w, -h, h, 1.0f, -1.0f);
+
+	GLint projectionLoc = glGetUniformLocation(mTexShaderProgram, "uViewProjection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, vpm.Data());
+
+	if(mTexture != nullptr){
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture(GL_TEXTURE_2D, mTextureID);
+		mTexture->Draw();
+	}
+
 }

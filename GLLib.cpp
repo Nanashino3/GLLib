@@ -54,4 +54,14 @@ void DrawGridGround(float size, int rowNum, unsigned int color)
 	System::GetInstance()->DrawGridGround(size, rowNum, color);
 }
 
+int LoadGraph(const char* name)
+{
+	return System::GetInstance()->LoadGraph(name);
 }
+
+void DrawGraph(float posX, float posY)
+{
+	System::GetInstance()->DrawGraph(posX, posY);
+}
+
+} // namespace tkl

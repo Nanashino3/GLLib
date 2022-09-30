@@ -9,6 +9,7 @@ public:
 	{
 		GLfloat position[3];	// ˆÊ’u
 		GLfloat normal[3];		// –@ü
+		GLfloat uv[2];			// uvÀ•W
 	};
 
 	Figure(GLint, GLsizei, const Vertex*, GLsizei indexCount = 0, const GLuint* index = 0);

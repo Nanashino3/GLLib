@@ -31,8 +31,10 @@ public:
 	int DrawPlane(float, float, float, float, float, float, unsigned int, int);
 
 	void DirectionalLight();
-
 	void DrawGridGround(float, int, unsigned int);
+
+	int LoadGraph(const char*);
+	void DrawGraph(float, float);
 
 	void SetViewProjection(const Matrix& vpm){ mViewProjection = vpm; }
 
@@ -50,10 +52,16 @@ private:
 	std::unique_ptr<Shape> mRectagle;	// 四角用
 	std::unique_ptr<Shape> mSphere;		// 球
 	std::unique_ptr<Shape> mPlane;		// 平面
+	std::unique_ptr<Shape> mTexture;
 
-	unsigned int mShaderProgram;		// シェーダオブジェクト
-
+	unsigned int mShaderProgram;		// シェーダ識別子
+	unsigned int mSimpleShaderProgram;	// 単純シェーダ識別子
+	unsigned int mTexShaderProgram;
 
 	Quaternion mRotation;
 	Matrix mViewProjection;
+
+	int mTextureW;
+	int mTextureH;
+	unsigned int mTextureID;
 };

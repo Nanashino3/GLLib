@@ -74,5 +74,11 @@
     <None Include="PhongFrag.glsl">
       <Filter>Library\Shader</Filter>
     </None>
+    <None Include="SpriteVert.glsl">
+      <Filter>Library\Shader</Filter>
+    </None>
+    <None Include="SpriteFrag.glsl">
+      <Filter>Library\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

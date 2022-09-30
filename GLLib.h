@@ -17,4 +17,7 @@ int DrawPlane(float, float, float, float, float, float, unsigned int, int);
 void DirectionalLight();
 void DrawGridGround(float, int, unsigned int color = 0x99999999);
 
+int LoadGraph(const char*);
+void DrawGraph(float, float);
+
 }

@@ -163,10 +163,10 @@ Shader::~Shader()
 
 void Shader::Initialize(const Window& window)
 {
-//	mShader = Load2DShader("PointVert.glsl", "PointFrag.glsl");
 	mShader = Load2DShader("LambertVert.glsl", "LambertFrag.glsl");
 //	mShader = Load2DShader("PhongVert.glsl", "PhongFrag.glsl");
-	glUseProgram(mShader);
+	mSimpleShader = Load2DShader("PointVert.glsl", "PointFrag.glsl");
+	mTexShader = Load2DShader("SpriteVert.glsl", "SpriteFrag.glsl");
 }
 
 void Shader::SetMatrixUniform(const char* name, const Matrix& matrix)
