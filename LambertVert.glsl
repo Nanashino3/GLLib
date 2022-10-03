@@ -2,10 +2,12 @@
 uniform mat4 uWorldTransform;	// ワールド変換座標
 uniform mat4 uViewProjection;	// ビュー射影行列
 
-in vec3 inPosition;				// 位置座標
-in vec3 inNormal;				// 法線座標
+layout (location = 0) in vec3 inPosition;	// 位置座標
+layout (location = 1) in vec3 inNormal;		// 法線座標
+layout (location = 2) in vec2 inTexCoord;	// UV座標
 
 out vec3 fragNormal;
+out vec2 fragTexCoord;
 
 void main()
 {
@@ -16,4 +18,6 @@ void main()
 
 	// ワールド座標に変換する
 	fragNormal = (uWorldTransform * vec4(inNormal, 0.0)).xyz;
+
+	fragTexCoord = inTexCoord;
 }

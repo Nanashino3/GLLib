@@ -35,6 +35,7 @@ public:
 
 	int LoadGraph(const char*);
 	void DrawGraph(float, float);
+	void DrawGraphPlane(float, float, float);
 
 	void SetViewProjection(const Matrix& vpm){ mViewProjection = vpm; }
 
@@ -52,7 +53,8 @@ private:
 	std::unique_ptr<Shape> mRectagle;	// 四角用
 	std::unique_ptr<Shape> mSphere;		// 球
 	std::unique_ptr<Shape> mPlane;		// 平面
-	std::unique_ptr<Shape> mTexture;
+	std::unique_ptr<Shape> mTexture;	// 2D画像
+	std::unique_ptr<Shape> mTexPlane;	// 3D画像
 
 	unsigned int mShaderProgram;		// シェーダ識別子
 	unsigned int mSimpleShaderProgram;	// 単純シェーダ識別子

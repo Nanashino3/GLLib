@@ -1,5 +1,6 @@
 #version 460 core
 
+uniform sampler2D uTexture;
 uniform vec3 uAmbientColor;	// ŠÂ‹«Œõ(Ka)
 
 // •½sŒõŒ¹
@@ -11,6 +12,8 @@ struct DirectionalLight
 uniform DirectionalLight uDirLight;
 
 in vec3 fragNormal;		// –@üÀ•W
+in vec2 fragTexCoord;
+
 out vec4 outColor;
 
 void main()
@@ -31,5 +34,5 @@ void main()
 		Lambert += Diffuse;
 	}
 
-	outColor = vec4(Lambert, 1.0);
+	outColor = texture(uTexture, fragTexCoord) * vec4(Lambert, 1.0);
 }

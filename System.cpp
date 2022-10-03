@@ -496,3 +496,45 @@ void System::DrawGraph(float posX, float posY)
 	}
 
 }
+
+void System::DrawGraphPlane(float posX, float posY, float posZ)
+{
+	glUseProgram(mShaderProgram);
+	if(mTexPlane == nullptr){
+		Figure::Vertex vertices[] = {
+			{-1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
+			{ 1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
+			{ 1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
+			{-1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f}
+		};
+
+		GLuint indices[] = {
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		GLsizei indexNum = sizeof(indices) / sizeof(indices[0]);
+		mTexPlane = std::make_unique<ShapeIndex>(3, 4, vertices, indexNum, indices);
+	}
+	//**********************************************
+	// ワールド変換行列作成
+	Matrix wm = Matrix::Translate(posX, -posY, posZ);
+
+	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
+	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
+	//**********************************************
+
+	//**********************************************
+	// ビュー射影行列作成
+	GLint projectionLoc = glGetUniformLocation(mShaderProgram, "uViewProjection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, mViewProjection.Data());
+
+	if(mTexPlane != nullptr){
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture(GL_TEXTURE_2D, mTextureID); 
+		mTexPlane->Draw();
+	}
+	
+	return;
+}

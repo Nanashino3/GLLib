@@ -64,4 +64,9 @@ void DrawGraph(float posX, float posY)
 	System::GetInstance()->DrawGraph(posX, posY);
 }
 
+void DrawGraphPlane(float posX, float posY, float posZ)
+{
+	System::GetInstance()->DrawGraphPlane(posX, posY, posZ);
+}
+
 } // namespace tkl

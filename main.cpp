@@ -16,7 +16,7 @@ int main()
 	}
 
 	// ”wŒiF‚ðŒˆ’è
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	Camera* camera = new Camera();
 
@@ -40,8 +40,8 @@ int main()
 		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
 			y -= 0.1f;
 		}
-		
-//		camera->Update();
+
+		camera->Update();
 
 //		tkl::DrawBox(x, y, 50.0f, 50.0f, -1, true);
 //		tkl::DrawGraph(x, y);
@@ -49,9 +49,10 @@ int main()
 //		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
 //		tkl::DrawSphere(x, y,  0.0f, 1.0f, 16, 8);
 //		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-//		tkl::DirectionalLight();
+		tkl::DrawGraphPlane(x, y, z);
+		tkl::DirectionalLight();
 
-//		tkl::DrawGridGround(50.0f, 10.0f);
+		tkl::DrawGridGround(50.0f, 10.0f);
 
 		tkl::SwapBuffers();
 	}
