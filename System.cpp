@@ -155,40 +155,40 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
 			// 左面
-			{ -1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
-			{ -1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
-			{ -1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
-			{ -1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
+			{ -1.0f, -1.0f, -1.0f,  -1.0f,  0.0f,  0.0f },
+			{ -1.0f, -1.0f,  1.0f,  -1.0f,  0.0f,  0.0f },
+			{ -1.0f,  1.0f,  1.0f,  -1.0f,  0.0f,  0.0f },
+			{ -1.0f,  1.0f, -1.0f,  -1.0f,  0.0f,  0.0f },
 			
 			// 裏面
-			{  1.0f, -1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
-			{ -1.0f, -1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
-			{ -1.0f,  1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
-			{  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,  1.0f },
+			{  1.0f, -1.0f, -1.0f,  0.0f,  0.0f,  -1.0f },
+			{ -1.0f, -1.0f, -1.0f,  0.0f,  0.0f,  -1.0f },
+			{ -1.0f,  1.0f, -1.0f,  0.0f,  0.0f,  -1.0f },
+			{  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,  -1.0f },
 
 			// 下面
-			{ -1.0f, -1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
-			{  1.0f, -1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
-			{  1.0f, -1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
-			{ -1.0f, -1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+			{ -1.0f, -1.0f, -1.0f,  0.0f,  -1.0f,  0.0f },
+			{  1.0f, -1.0f, -1.0f,  0.0f,  -1.0f,  0.0f },
+			{  1.0f, -1.0f,  1.0f,  0.0f,  -1.0f,  0.0f },
+			{ -1.0f, -1.0f,  1.0f,  0.0f,  -1.0f,  0.0f },
 
 			// 右面
-			{  1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
-			{  1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
-			{  1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f },
-			{  1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f },
+			{  1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f },
+			{  1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f },
 
 			// 上面
-			{ -1.0f,  1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
-			{ -1.0f,  1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
-			{  1.0f,  1.0f,  1.0f,  0.0f, -1.0f,  0.0f },
-			{  1.0f,  1.0f, -1.0f,  0.0f, -1.0f,  0.0f },
+			{ -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
+			{ -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+			{  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+			{  1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f },
 
 			// 前面
-			{ -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, -1.0f },
-			{  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, -1.0f },
-			{  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, -1.0f },
-			{ -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, -1.0f }
+			{ -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+			{  1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+			{  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+			{ -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f }
 		};
 
 		GLuint indices[] = {
@@ -307,10 +307,10 @@ int System::DrawPlane(float posX, float posY, float posZ, float width, float hei
 	glUseProgram(mShaderProgram);
 	if(mPlane == nullptr){
 		Figure::Vertex vertices[] = {
-			{-1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f},
-			{ 1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f},
-			{ 1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f},
-			{-1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f}
+			{-1.0,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f},
+			{ 1.0,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f},
+			{ 1.0,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f},
+			{-1.0,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f}
 		};
 
 		GLuint indices[] = {
@@ -348,7 +348,7 @@ void System::DirectionalLight()
 	// 光源設定
 	// ライティングパラメータ設定
 	Vector3 ambientLight = Vector3(0.2f, 0.2f, 0.2f);
-	Vector3 dirLightDirection = Vector3(0.0f, 1.0f, 0.0f);
+	Vector3 dirLightDirection = Vector3(0.0f, -1.0f, 0.0f);
 	Vector3 dirLightDiffuseColor = Vector3(1.0f, 1.0f, 1.0f);
 	Vector3 dirLightSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
@@ -502,10 +502,10 @@ void System::DrawGraphPlane(float posX, float posY, float posZ)
 	glUseProgram(mShaderProgram);
 	if(mTexPlane == nullptr){
 		Figure::Vertex vertices[] = {
-			{-1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
-			{ 1.0,  0.0f, -1.0f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
-			{ 1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
-			{-1.0,  0.0f,  1.0f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f}
+			{-1.0,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f},
+			{ 1.0,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f},
+			{ 1.0,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f},
+			{-1.0,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f}
 		};
 
 		GLuint indices[] = {

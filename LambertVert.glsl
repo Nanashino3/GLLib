@@ -7,7 +7,6 @@ layout (location = 1) in vec3 inNormal;		// 法線座標
 layout (location = 2) in vec2 inTexCoord;	// UV座標
 
 out vec3 fragNormal;
-out vec2 fragTexCoord;
 
 void main()
 {
@@ -18,6 +17,4 @@ void main()
 
 	// ワールド座標に変換する
 	fragNormal = (uWorldTransform * vec4(inNormal, 0.0)).xyz;
-
-	fragTexCoord = inTexCoord;
 }

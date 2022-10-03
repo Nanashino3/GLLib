@@ -20,7 +20,7 @@ int main()
 
 	Camera* camera = new Camera();
 
-	tkl::LoadGraph("Assets/Ship.png");
+//	tkl::LoadGraph("Assets/Ship.png");
 
 	float x = 0.0f, y = 0.0f, z = 0.0f;
 	while(!tkl::ProcessMessage()){
@@ -48,10 +48,10 @@ int main()
 
 //		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
 //		tkl::DrawSphere(x, y,  0.0f, 1.0f, 16, 8);
-//		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-		tkl::DrawGraphPlane(x, y, z);
-		tkl::DirectionalLight();
+		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+//		tkl::DrawGraphPlane(x, y, z);
 
+		tkl::DirectionalLight();
 		tkl::DrawGridGround(50.0f, 10.0f);
 
 		tkl::SwapBuffers();
