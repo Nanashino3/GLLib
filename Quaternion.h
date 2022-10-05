@@ -31,19 +31,6 @@ public:
 		return *this;
 	}
 
-//	// 正規化された回転軸と回転角からクォータニオンを計算する
-//	Quaternion(const Vector3& axis, float angle)
-//	{
-//		// qv = 正規化されたベクトル * sin(θ/2)
-//		float scalar = sinf(angle / 2.0f);
-//		mX = axis.mX * scalar;
-//		mY = axis.mY * scalar;
-//		mZ = axis.mZ * scalar;
-//		
-//		// qs = cos(θ/2)
-//		mW = cosf(angle / 2.0f);
-//	}
-
 	// 共役クォータニオン
 	void Conjugate()
 	{
@@ -74,28 +61,26 @@ public:
 		return temp;
 	}
 
-	//// クォータニオンの結合
-	//static Quaternion Concatenate(const Quaternion& q, const Quaternion& p)
-	//{
-	//	Vector3 qv(q.mX, q.mY, q.mZ);
-	//	Vector3 pv(p.mX, p.mY, p.mZ);
-	//	// グラスマン積
-	//	// (pq)v = ps * qv + qs * pv + cross(pv, qv);
-	//	Vector3 newVector = p.mW * qv + q.mW * pv + Vector3::Cross(pv, qv);
-	//	// (pq)s = ps * qs - dot(pv, qv);
-	//	float newScalar = p.mW * q.mW - Vector3::Dot(pv, qv);
-
-	//	// クォータニオンとして返却
-	//	return Quaternion(newVector.mX, newVector.mY, newVector.mZ, newScalar);
-	//}
-
 	// クォータニオンでベクトルを回転させる
 	static Vector3 Transform(const Vector3& v, const Quaternion& q)
 	{
+#if 0
 		Vector3 qv(q.mX, q.mY, q.mZ);
 		Vector3 newVector = v;
 
 		newVector += 2.0f * Vector3::Cross(qv, Vector3::Cross(qv, v) + q.mW * v);
 		return newVector;
+#else
+		float w = -q.mX * v.mX - q.mY * v.mY - q.mZ * v.mZ;
+		float x =  q.mY * v.mZ - q.mZ * v.mY + q.mW * v.mX;
+		float y =  q.mZ * v.mX - q.mX * v.mZ + q.mW * v.mY;
+		float z =  q.mX * v.mY - q.mY * v.mX + q.mW * v.mZ;
+
+		float vx = y * -q.mZ + z * q.mY - w * q.mX + x * q.mW;
+		float vy = z * -q.mX + x * q.mZ - w * q.mY + y * q.mW;
+		float vz = x * -q.mY + y * q.mX - w * q.mZ + z * q.mW;
+
+		return Vector3(vx, vy, vz);
+#endif
 	}
 };

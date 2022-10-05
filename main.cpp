@@ -20,7 +20,7 @@ int main()
 
 	Camera* camera = new Camera();
 
-//	tkl::LoadGraph("Assets/Ship.png");
+	tkl::LoadGraph("Assets/Ship.png");
 
 	float x = 0.0f, y = 0.0f, z = 0.0f;
 	while(!tkl::ProcessMessage()){
@@ -34,10 +34,10 @@ int main()
 			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
 			x += 0.1f;
 		}
-		if(tkl::Input::IsKeyDown(eKeys::KB_S)){
+		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
 			y += 0.1f;
 		}
-		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
+		if(tkl::Input::IsKeyDown(eKeys::KB_S)){
 			y -= 0.1f;
 		}
 
@@ -46,13 +46,13 @@ int main()
 //		tkl::DrawBox(x, y, 50.0f, 50.0f, -1, true);
 //		tkl::DrawGraph(x, y);
 
-//		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
 //		tkl::DrawSphere(x, y,  0.0f, 1.0f, 16, 8);
-		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+//		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
 //		tkl::DrawGraphPlane(x, y, z);
 
 		tkl::DirectionalLight();
-		tkl::DrawGridGround(50.0f, 10.0f);
+		tkl::DrawGridGround(50, 20);
 
 		tkl::SwapBuffers();
 	}

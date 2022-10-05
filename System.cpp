@@ -211,10 +211,12 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 
 	//**********************************************
 	// ワールド変換行列作成(右手座標形なので「平行→回転→拡縮」の順)
-//	mRotation *= Quaternion::AngleAxis(Vector3(1.0f, 0.0f, 0.0f), ToRadian(1.0f));	// X軸回転
+	mRotation *= Quaternion::AngleAxis(Vector3(0, 0, 1), ToRadian(1));
+	Vector3 temp = Quaternion::Transform({1, 1, 0}, mRotation);
 
-	Matrix wm = Matrix::Translate(posX, -posY, posZ);
-	wm *= Matrix::CreateQuaternion(mRotation);
+	Matrix wm = Matrix::Translate(posX, posY, posZ);
+//	Matrix wm = Matrix::Translate(temp.mX, temp.mY, temp.mZ);
+//	wm *= Matrix::CreateQuaternion(mRotation);
 	wm *= Matrix::Scale(width, height, depth);
 
 	GLint worldTransformLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
