@@ -154,6 +154,7 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	glUseProgram(mShaderProgram);
 	if (mRectagle == nullptr) {
 		Figure::Vertex vertices[] = {
+#if 0
 			// ç∂ñ 
 			{ -1.0f, -1.0f, -1.0f,  -1.0f,  0.0f,  0.0f },
 			{ -1.0f, -1.0f,  1.0f,  -1.0f,  0.0f,  0.0f },
@@ -190,7 +191,45 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 			{  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f },
 			{ -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f }
 		};
+#else
+			// ç∂ñ 
+		{ -25.0f, -25.0f, -25.0f, -1.0f, 0.0f, 0.0f },
+		{ -25.0f, -25.0f,  25.0f,  -1.0f,  0.0f,  0.0f },
+		{ -25.0f,  25.0f,  25.0f,  -1.0f,  0.0f,  0.0f },
+		{ -25.0f,  25.0f, -25.0f,  -1.0f,  0.0f,  0.0f },
 
+		// ó†ñ 
+		{  25.0f, -25.0f, -25.0f,  0.0f,  0.0f,  -1.0f },
+		{ -25.0f, -25.0f, -25.0f,  0.0f,  0.0f,  -1.0f },
+		{ -25.0f,  25.0f, -25.0f,  0.0f,  0.0f,  -1.0f },
+		{  25.0f,  25.0f, -25.0f,  0.0f,  0.0f,  -1.0f },
+
+		// â∫ñ 
+		{ -25.0f, -25.0f, -25.0f,  0.0f,  -1.0f,  0.0f },
+		{  25.0f, -25.0f, -25.0f,  0.0f,  -1.0f,  0.0f },
+		{  25.0f, -25.0f,  25.0f,  0.0f,  -1.0f,  0.0f },
+		{ -25.0f, -25.0f,  25.0f,  0.0f,  -1.0f,  0.0f },
+
+		// âEñ 
+		{  25.0f, -25.0f,  25.0f,  1.0f,  0.0f,  0.0f },
+		{  25.0f, -25.0f, -25.0f,  1.0f,  0.0f,  0.0f },
+		{  25.0f,  25.0f, -25.0f,  1.0f,  0.0f,  0.0f },
+		{  25.0f,  25.0f,  25.0f,  1.0f,  0.0f,  0.0f },
+
+		// è„ñ 
+		{ -25.0f,  25.0f, -25.0f,  0.0f,  1.0f,  0.0f },
+		{ -25.0f,  25.0f,  25.0f,  0.0f,  1.0f,  0.0f },
+		{  25.0f,  25.0f,  25.0f,  0.0f,  1.0f,  0.0f },
+		{  25.0f,  25.0f, -25.0f,  0.0f,  1.0f,  0.0f },
+
+		// ëOñ 
+		{ -25.0f, -25.0f,  25.0f,  0.0f,  0.0f,  1.0f },
+		{  25.0f, -25.0f,  25.0f,  0.0f,  0.0f,  1.0f },
+		{  25.0f,  25.0f,  25.0f,  0.0f,  0.0f,  1.0f },
+		{ -25.0f,  25.0f,  25.0f,  0.0f,  0.0f,  1.0f }
+		};
+
+#endif
 		GLuint indices[] = {
 			 0,  1,  2,  0,  2,  3,	// ç∂ñ 
 			 4,  5,  6,  4,  6,  7,	// ó†ñ 
@@ -380,7 +419,7 @@ void System::DrawGridGround(float size, int rowNum, unsigned int color)
 {
 	glUseProgram(mSimpleShaderProgram);
 	if(mLine == nullptr){
-		float l = rowNum * 0.5f;
+		float l = size * rowNum * 0.5f;
 		float n = -l;
 
 		Figure::Vertex v[4] = {0.0f}; 
@@ -404,7 +443,7 @@ void System::DrawGridGround(float size, int rowNum, unsigned int color)
 			gridVertex.emplace_back(v[2]);
 			gridVertex.emplace_back(v[3]);
 
-			n += 1.0f;
+			n += size;
 		}
 
 		Figure::Vertex v5 = { 0.0f,   l,  0.0f,  0.0f,  1.0f,  0.0f };

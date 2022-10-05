@@ -3,7 +3,8 @@
 #include "System.h"
 
 Camera::Camera(int screenW, int screenH)
-: mCamPos(Vector3(3.0f, 4.0f, 5.0f))
+//: mCamPos(Vector3(3.0f, 4.0f, 5.0f))
+: mCamPos(100.0f, 100.0f, 300.0f)
 , mTargetPos(Vector3(0.0f, 0.0f, 0.0f))
 , mUpVector(Vector3(0.0f, 1.0f, 0.0f))
 , mScreenW(screenW)

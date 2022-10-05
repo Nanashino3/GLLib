@@ -28,17 +28,17 @@ int main()
 		
 		if(tkl::Input::IsKeyDown(eKeys::KB_A)){
 			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
-			x -= 0.1f;
+			x -= 1.0f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_D)){
 			//std::cout << "A‚ª‰Ÿ‚³‚ê‚Ä‚¢‚Ü‚·" << std::endl;
-			x += 0.1f;
+			x += 1.0f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_W)){
-			y += 0.1f;
+			y += 1.0f;
 		}
 		if(tkl::Input::IsKeyDown(eKeys::KB_S)){
-			y -= 0.1f;
+			y -= 1.0f;
 		}
 
 		camera->Update();
