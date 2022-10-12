@@ -46,8 +46,8 @@ int main()
 //		tkl::DrawBox(x, y, 50.0f, 50.0f, -1, true);
 //		tkl::DrawGraph(x, y);
 
-		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
-//		tkl::DrawSphere(x, y,  0.0f, 1.0f, 16, 8);
+//		tkl::DrawCube(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
+		tkl::DrawSphere(x, y,  0.0f, 50.0f, 24, 16);
 //		tkl::DrawPlane(x, y, z, 1.0f, 1.0f, 1.0f, -1, true);
 //		tkl::DrawGraphPlane(x, y, z);
 

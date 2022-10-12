@@ -49,9 +49,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Library\System</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Library\System</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLLib.h">

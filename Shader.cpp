@@ -91,9 +91,9 @@ unsigned int CreateShader(const char* vertexSrc, const char* fragmentSrc)
 	}
 
 	// Šeí‘®«‚ğƒŠƒ“ƒN‚·‚é
-	glBindAttribLocation(program, 0, "inPosition");
-	glBindAttribLocation(program, 1, "inNormal");
-	glBindFragDataLocation(program, 0, "outColor");
+//	glBindAttribLocation(program, 0, "inPosition");
+//	glBindAttribLocation(program, 1, "inNormal");
+//	glBindFragDataLocation(program, 0, "outColor");
 	glLinkProgram(program);
 
 	if(PrintProgramInfoLog(program)){ return static_cast<unsigned int>(program); }

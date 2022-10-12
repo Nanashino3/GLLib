@@ -251,11 +251,10 @@ int System::DrawCube(float posX, float posY, float posZ, float width, float heig
 	//**********************************************
 	// ワールド変換行列作成(右手座標形なので「平行→回転→拡縮」の順)
 	mRotation *= Quaternion::AngleAxis(Vector3(0, 0, 1), ToRadian(1));
-	Vector3 temp = Quaternion::Transform({1, 1, 0}, mRotation);
+	Vector3 temp = Quaternion::Transform({25.0f / 2.0f, 25.0f / 2.0f, 0}, mRotation);
 
-	Matrix wm = Matrix::Translate(posX, posY, posZ);
-//	Matrix wm = Matrix::Translate(temp.mX, temp.mY, temp.mZ);
-//	wm *= Matrix::CreateQuaternion(mRotation);
+	Matrix wm = Matrix::Translate(temp.mX, temp.mY, temp.mZ);
+	wm *= Matrix::CreateQuaternion(mRotation);
 	wm *= Matrix::Scale(width, height, depth);
 
 	GLint worldTransformLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
@@ -319,14 +318,12 @@ int System::DrawSphere(float posX, float posY, float posZ, float radius, int div
 			static_cast<GLsizei>(sphereVertex.size()), sphereVertex.data(),
 			static_cast<GLsizei>(sphereIndex.size()), sphereIndex.data());
 	}
-
-	Vector3 camPos = Vector3(3.0f, 4.0f, 5.0f);
-
 	//**********************************************
 	// ワールド変換行列作成
 
-	Matrix wm = Matrix::Translate(posX, -posY, posZ);
-	wm *= Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
+	Matrix wm = Matrix::Translate(posX, posY, posZ);
+//	mRotation *= Quaternion::AngleAxis(Vector3(0, 0, 1), ToRadian(1));
+//	wm *= Matrix::Rotate(static_cast<GLfloat>(glfwGetTime()), Vector3(0.0f, 1.0f, 0.0f));
 
 	GLint modelViewLoc = glGetUniformLocation(mShaderProgram, "uWorldTransform");
 	glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, wm.Data());
